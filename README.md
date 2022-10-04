@@ -1,2 +1,2 @@
-# uni-iaapa
-Unity application (BEAT THE BUZZ) for the IAAPA event 2022.
+# uni-template
+Repository template for Unity project (Owner Natan Couture Dumais)
