@@ -8,21 +8,21 @@ public class ShowControl : MonoBehaviour {
 
 	[Serializable]
 	public enum PartyState {
-		Welcome,
+		Introductions,
 		Qualifiers,
-		TournamentLoading,
+		PreTournament,
 		Tournament,
-		TournamentEnded,
-		FreePlay
+		PostTournament,
+		FreePlays
 	}
 
 	[Serializable]
 	public enum GameState {
 		Idle,
-		PlayersLoading,
-		PlayersLocked,
-		GameRunning,
-		GameEnded
+		OnBoarding,
+		Ready,
+		Running,
+		Ended
 	}
 
 
@@ -80,43 +80,29 @@ public class ShowControl : MonoBehaviour {
 	}
 
 	private void UpdateMainView() {
-		switch (CurrentGameState) {
-			case GameState.PlayersLoading:
-				ShowView(mainCanvas, "PlayersLoading");
-				break;
-			case GameState.PlayersLocked:
-				ShowView(mainCanvas, "PlayersLocked");
-				break;
-			case GameState.GameRunning:
-				ShowView(mainCanvas, "GameRunning");
-				break;
-			case GameState.GameEnded:
-				ShowView(mainCanvas, "GameEnded");
-				break;
-			default: //GameState.Idle
-				ShowView(mainCanvas, "Idle");
-				break;
-		}
+		// NOTE: Assumes View Name contains the GameState name
+		ShowView(mainCanvas, CurrentGameState.ToString());
 	}
 	private void UpdateSecondaryView() {
+		// NOTE: Some views are shared by different PartyStates.
 		switch (CurrentPartyState) {
 			case PartyState.Qualifiers:
-				ShowView(secondaryCanvas,"Game");
+				ShowView(secondaryCanvas,"HighScoresAll");
 				break;
-			case PartyState.TournamentLoading:
-				ShowView(secondaryCanvas,"Game");
+			case PartyState.PreTournament:
+				ShowView(secondaryCanvas,"HighScoresTop30");
 				break;
 			case PartyState.Tournament:
 				ShowView(secondaryCanvas,"Tournament");
 				break;
-			case PartyState.TournamentEnded:
+			case PartyState.PostTournament:
 				ShowView(secondaryCanvas,"Tournament");
 				break;
-			case PartyState.FreePlay:
+			case PartyState.FreePlays:
 				ShowView(secondaryCanvas,"Tournament");
 				break;
-			default: //PartyState.Welcome:
-				ShowView(secondaryCanvas,"Welcome");
+			default:
+				ShowView(secondaryCanvas,"Idle");
 				break;
 		}
 	}
