@@ -40,7 +40,7 @@ public class Timer : MonoBehaviour
 
     public void startTimer()
     {
-        timeRemaining = 100;
+        timeRemaining = totaltime;
         timerIsRunning = true;
     }
 
