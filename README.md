@@ -14,7 +14,8 @@ Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 
 ## How To Pull the Project
 1. Download all needed tools from listed software requirements above.
 1. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) from GitHub.
-1. Use LFS to pull all files: `git lfs pull`.  Otherwise, you may get errors from missing expected files.
+1. If previously cloned and just need to get code updates, then `git pull`.  
+1. Make sure to use LFS to pull all files: `git lfs pull`.  Otherwise, you may get errors from missing expected files.
 1. In Unity Hub > Installs, install the Unity Editor for the LTS version used by the repository currently, 2021.3.11f1.
 
 ## How To Make Changes to the Project
