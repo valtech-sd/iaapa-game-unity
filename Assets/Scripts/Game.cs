@@ -89,7 +89,7 @@ public class Game : MonoBehaviour {
 				GameStateMessage gameStateMessage = JsonConvert.DeserializeObject<GameStateMessage>(message);
 
 				if (!gameStateMessage.Equals(null) && gameStateMessage.Type == "gamestate") {
-					//Debug.Log($"Deserialized Message: {gameRun}");
+					//Debug.Log($"Deserialized Message: {gameStateMessage}");
 
 					// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 					// Update a variable we can read from the main thread instead.
