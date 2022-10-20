@@ -3,6 +3,7 @@ using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Doozy.Runtime.Nody;
 using Doozy.Runtime.UIManager.Components;
@@ -66,9 +67,23 @@ public class Game : MonoBehaviour {
 
 	// The latest game state message from Rabbit MQ
 	private GameStateMessage currentGameStateData;
+	public GameStateMessage CurrentGameStateData {
+		get => currentGameStateData;
+		set {
+			currentGameStateData = value;
+			Debug.Log("CurrentGameStateData has been set!");
+		}
+	}
 
 	// Whether the text elements need updating due to a new game state message
 	private bool needsUpdate = false;
+	public bool NeedsUpdate {
+		get => needsUpdate;
+		set {
+			needsUpdate = value;
+			Debug.Log("NeedsUpdate has been set!");
+		}
+	}
 
 	// Reference to Timer class instance in the game
 	private Timer timer;
@@ -102,7 +117,7 @@ public class Game : MonoBehaviour {
 		flowControllerComponent = flowController.GetComponent<FlowController>();
 	}
 	void OnDestroy() {
-		showControl.UnRegisterConsumer(HandleGameStateMessage);
+		//showControl.UnRegisterConsumer(HandleGameStateMessage);
 	}
 
 	void Update() {

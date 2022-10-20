@@ -50,6 +50,41 @@ public class ShowControl : MonoBehaviour {
 		consumer.Received -= handler;
 	}
 
+	public GameObject FindChildWithTag(GameObject parent, string tag) {
+		GameObject child = null;
+
+		foreach(Transform transform in parent.transform) {
+			if(transform.CompareTag(tag)) {
+				child = transform.gameObject;
+				break;
+			}
+		}
+
+		return child;
+	}
+	public List<GameObject> FindChildrenWithTag(GameObject parent, string tag) {
+		List<GameObject> children = new List<GameObject>();
+
+		foreach(Transform transform in parent.transform) {
+			if(transform.CompareTag(tag)) {
+				children.Add(transform.gameObject);
+				break;
+			}
+		}
+
+		return children;
+	}
+
+	public GameObject FindChildWithName(GameObject obj, string name) {
+		Transform trans = obj.transform;
+		Transform childTrans = trans.Find(name);
+		if (childTrans != null) {
+			return childTrans.gameObject;
+		} else {
+			return null;
+		}
+	}
+
 
 }
 

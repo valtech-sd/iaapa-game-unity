@@ -1,15 +1,18 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class Timer : MonoBehaviour {
-	public float totaltime = 100;
-	public float timeRemaining = 10;
-	public bool timerIsRunning = false;
-	public Text timeText;
+	[SerializeField] bool timerIsRunning = false;
+	private const float defaultTotalTime = 60;
+	private float timeRemaining = defaultTotalTime;
+	private Text timerText;
+
 	private void Start() {
 		// Starts the timer automatically
 		//timerIsRunning = true;
+
+		// Get the sibling Text component in the Game Object this script is attached to
+		timerText = GetComponent<Text>();
 	}
 	void Update() {
 		if (timerIsRunning) {
@@ -25,19 +28,23 @@ public class Timer : MonoBehaviour {
 		}
 	}
 	void DisplayTime(float timeToDisplay) {
+		//Debug.Log("timeToDisplay: " + timeToDisplay);
 		timeToDisplay += 1;
 		float minutes = Mathf.FloorToInt(timeToDisplay / 60);
 		float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-		timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+		Debug.Log("minutes: " + minutes);
+		Debug.Log("seconds: " + seconds);
+
+		timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
 	}
 
-	public void startTimer() {
-		timeRemaining = totaltime;
+	public void startTimer(float totalTime = defaultTotalTime) {
+		timeRemaining = totalTime;
 		timerIsRunning = true;
 	}
 
-	public void resetTimerAndWait() {
-		timeRemaining = totaltime;
+	public void resetTimerAndWait(float totalTime = defaultTotalTime) {
+		timeRemaining = totalTime;
 		DisplayTime(timeRemaining);
 		timerIsRunning = false;
 	}
