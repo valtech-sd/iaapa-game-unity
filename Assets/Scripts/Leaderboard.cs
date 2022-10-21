@@ -68,7 +68,7 @@ public class Leaderboard : MonoBehaviour {
 		if (needsUpdate || game.NeedsUpdate) {
 			var partyState = game.CurrentGameStateData is not null
 				? game.CurrentGameStateData.Data.GameStatus
-				: "leaderboard";
+				: "qualifiers";
 			TriggerFlowControl(partyState);
 			switch (partyState) {
 				case "idle":
