@@ -53,10 +53,9 @@ public class Leaderboard : MonoBehaviour {
 		// Set Flow Controller Component
 		flowControllerComponent = flowController.GetComponent<FlowController>();
 
-		// Destroy all existing placeholder player cells
-		DestroyPlaceholderCells(playerCellParentTop24);
-		DestroyPlaceholderCells(playerCellParentRemainder);
-
+		// Destroy all existing player cells
+		//DestroyCells(playerCellParentTop24);
+		//DestroyCells(playerCellParentRemainder);
 	}
 
 	void OnDestroy() {
@@ -67,8 +66,11 @@ public class Leaderboard : MonoBehaviour {
 		// Party state is NOT currently being sent.
 		// Leverage game state.  If "idle", display idle screen.  Else, display the leaderboard.
 		if (needsUpdate || game.NeedsUpdate) {
-			TriggerFlowControl(game.CurrentGameStateData.Data.GameStatus);
-			switch (game.CurrentGameStateData.Data.GameStatus) {
+			var partyState = game.CurrentGameStateData is not null
+				? game.CurrentGameStateData.Data.GameStatus
+				: "leaderboard";
+			TriggerFlowControl(partyState);
+			switch (partyState) {
 				case "idle":
 					break;
 				default:
@@ -113,16 +115,31 @@ public class Leaderboard : MonoBehaviour {
 		}
 	}
 
-	private void DestroyPlaceholderCells(GameObject parent) {
+	private void DestroyCells(GameObject parent) {
 		foreach (Transform child in parent.transform) {
-			// TODO: NOT DELETING THE EXISTING PREFAB INSTANCES
-			if (PrefabUtility.GetPrefabInstanceStatus(child) != PrefabInstanceStatus.NotAPrefab) {
+			// NOTE: The following all say that the PlayerCell instances are all not prefab
+			// so we cannot use them to determine the objects to delete:
+			// - PrefabUtility.GetPrefabAssetType(child)
+			// - PrefabUtility.GetPrefabParent(child) != null && PrefabUtility.GetPrefabObject(child) != null
+			// - PrefabUtility.IsPartOfAnyPrefab(child)
+			// - PrefabUtility.GetPrefabInstanceStatus(child)
+			// For now, use the name instead.  This way, we can keep the child Header object
+			// while deleting everything else whose name begins with "PlayerCell...".
+			if (child.name.StartsWith("PlayerCell")) {
+				//Debug.Log("Will destroy: " + child.name);
 				Destroy(child.gameObject);
+			}
+			else {
+				//Debug.Log("Will NOT destroy: " + child.name);
 			}
 		}
 	}
 
 	private void SetPlayerCells(LeaderboardData leaderboardData) {
+		// Destroy all existing player cells
+		DestroyCells(playerCellParentTop24);
+		DestroyCells(playerCellParentRemainder);
+
 		foreach (var entry in leaderboardData.Leaderboard) {
 			Debug.Log($"Updating data for rank: {entry.Rank}");
 			SetPlayerCell(entry);
@@ -132,17 +149,28 @@ public class Leaderboard : MonoBehaviour {
 	private void SetPlayerCell(LeaderboardEntry leaderboardEntry) {
 		playerCellParent = (leaderboardEntry.Rank <= 24) ? playerCellParentTop24 : playerCellParentRemainder;
 
-		/*var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity);
+		var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity, playerCellParent.transform);
 
-		var rankObject = showControl.FindChildWithTag(newCell, "PlayerRank");
+		/*var rankObject = showControl.FindChildWithTag(newCell, "PlayerRank");
 		var nameObject = showControl.FindChildWithTag(newCell, "PlayerName");
 		var scoreObject = showControl.FindChildWithTag(newCell, "PlayerScore");
-
 		rankObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.Rank.ToString();
-		nameObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.PlayerName.ToString();
-		scoreObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.Score.ToString();
+		nameObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.PlayerName;
+		scoreObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.Score.ToString();*/
 
-		newCell.transform.SetParent(playerCellParent.transform);*/
+		foreach (Transform child in newCell.transform) {
+			var textComponent = child.GetComponent<TextMeshProUGUI>();
+			if (child.name == "Rank") {
+				textComponent.text = leaderboardEntry.Rank.ToString();
+			} else if (child.name == "Player Name") {
+				textComponent.text = leaderboardEntry.PlayerName;
+			} else if (child.name == "Score") {
+				textComponent.text = leaderboardEntry.Score.ToString();
+			}
+		}
+		Debug.Log($"Adding to {playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
+
+		//newCell.transform.SetParent(playerCellParent.transform);
 
 	}
 
