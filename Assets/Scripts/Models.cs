@@ -14,6 +14,10 @@ public enum GameState {
 }
 
 
+public class GameFlags {
+	[JsonProperty("leaderboardEnabled")]
+	public bool LeaderboardEnabled { get; set; }
+}
 public class GameStateData {
 	[JsonProperty("gameId")]
 	public string GameId { get; set; }
@@ -23,6 +27,9 @@ public class GameStateData {
 
 	[JsonProperty("gameStartTimestamp")]
 	public long GameStartTimestamp { get; set; } //in milliseconds
+
+	[JsonProperty("flags")]
+	public GameFlags Flags { get; set; }
 
 	[JsonProperty("locations")]
 	public List<Seat> Locations { get; set; }
