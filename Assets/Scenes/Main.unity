@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostname: localhost
   username: rmqadmin
-  password: MTDXTnpuF0jGwDA
+  password: citk0hg05KCtegZ
   exchangeName: ex.iaapa-topic
 --- !u!1 &30440029 stripped
 GameObject:

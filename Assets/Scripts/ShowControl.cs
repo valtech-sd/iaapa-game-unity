@@ -24,7 +24,7 @@ public class ShowControl : MonoBehaviour {
 		channel = connection.CreateModel();
 
 		// Make sure the message bus exchange we need exists
-		channel.ExchangeDeclare(exchangeName, "topic", false, true, null);
+		channel.ExchangeDeclare(exchangeName, "topic", false, false, null);
 	}
 
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
