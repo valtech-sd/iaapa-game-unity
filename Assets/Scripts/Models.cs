@@ -1,16 +1,30 @@
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 
 public enum MessageType {
 	GameState,
-	Leaderboard
+	Leaderboard,
+	TurnStart,
+	Unknown
 }
 
 public enum GameState {
 	Idle,
 	Load,
 	Run,
-	End
+	End,
+	Unknown
+}
+
+public enum PartyState {
+	Idle,
+	Qualifiers,
+	PreTournament,
+	Tournament,
+	PostTournament,
+	FreePlay,
+	Unknown
 }
 
 
@@ -20,18 +34,23 @@ public class GameFlags {
 }
 public class GameStateData {
 	[JsonProperty("gameId")]
+	[CanBeNull]
 	public string GameId { get; set; }
 
 	[JsonProperty("gameStatus")]
+	[CanBeNull]
 	public string GameStatus { get; set; }
 
 	[JsonProperty("gameStartTimestamp")]
-	public long GameStartTimestamp { get; set; } //in milliseconds
+	[CanBeNull]
+	public long? GameStartTimestamp { get; set; } //in milliseconds
 
 	[JsonProperty("flags")]
+	[CanBeNull]
 	public GameFlags Flags { get; set; }
 
 	[JsonProperty("locations")]
+	[CanBeNull]
 	public List<Seat> Locations { get; set; }
 
 	public override string ToString() {
@@ -106,4 +125,32 @@ public class LeaderboardMessage
 
 	[JsonProperty("data")]
 	public LeaderboardData Data { get; set; }
+}
+
+
+public class TurnStartData
+{
+	[JsonProperty("gameId")]
+	public string GameId { get; set; }
+
+	[JsonProperty("playerId")]
+	public string PlayerId { get; set; }
+
+	[JsonProperty("turnNumber")]
+	public int TurnNumber { get; set; }
+
+	[JsonProperty("turnLengthMs")]
+	public int TurnLengthMs { get; set; }
+}
+
+public class TurnStartMessage
+{
+	[JsonProperty("type")]
+	public string Type { get; set; }
+
+	[JsonProperty("timestamp")]
+	public long Timestamp { get; set; }
+
+	[JsonProperty("data")]
+	public TurnStartData Data { get; set; }
 }

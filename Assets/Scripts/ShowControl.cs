@@ -1,11 +1,14 @@
+using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public class ShowControl : MonoBehaviour {
-	[Header("Message Bus")]
+	[Header("Message Broker")]
 	[SerializeField] string hostname = "localhost";
 	[SerializeField] string username = "rmqadmin";
 	[SerializeField] string password = "MTDXTnpuF0jGwDA";
@@ -50,6 +53,29 @@ public class ShowControl : MonoBehaviour {
 		consumer.Received -= handler;
 	}
 
+	public T GetMessageData<T>(BasicDeliverEventArgs eventArgs) {
+		var body = eventArgs.Body.ToArray();
+		var message = Encoding.UTF8.GetString(body);
+		var receivedRoutingKey = eventArgs.RoutingKey;
+		var consumerTag = eventArgs.ConsumerTag;
+		Debug.Log($"Consumer [{consumerTag}] received '{receivedRoutingKey}' message: '{message}'");
+
+		if (message.Length > 0) {
+			try {
+				T messageData = JsonConvert.DeserializeObject<T>(message);
+				//Debug.Log($"Deserialized Message: {messageData}");
+				return messageData;
+			}
+			catch (Exception e) {
+				Debug.LogError(e);
+				throw e;
+			}
+		}
+
+		return default(T);
+	}
+
+
 	public GameObject FindChildWithTag(GameObject parent, string tag) {
 		GameObject child = null;
 
@@ -84,7 +110,6 @@ public class ShowControl : MonoBehaviour {
 			return null;
 		}
 	}
-
 
 }
 

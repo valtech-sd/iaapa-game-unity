@@ -1,16 +1,16 @@
 using Doozy.Runtime.Nody;
+using Newtonsoft.Json;
+using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Linq;
 using System.Text;
-using Newtonsoft.Json;
-using RabbitMQ.Client;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour {
-	[Header("Message Bus")]
+	[Header("Message Broker")]
 	[SerializeField] string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
 	[SerializeField] string leaderboardRoutingKey = "#.leaderboard";
 
@@ -35,9 +35,32 @@ public class Leaderboard : MonoBehaviour {
 
 	// The latest leaderboard message from Rabbit MQ
 	private LeaderboardMessage currentLeaderboardData;
+	private LeaderboardMessage CurrentLeaderboardData {
+		get => currentLeaderboardData;
+		set {
+			currentLeaderboardData = value;
+			Debug.Log("CurrentLeaderboardData has been set to " + value);
+			NeedsUpdate = true;
+		}
+	}
 
 	// Whether the text elements need updating due to a new game state message
 	private bool needsUpdate = false;
+	private bool NeedsUpdate {
+		get => needsUpdate;
+		set {
+			needsUpdate = value;
+			Debug.Log("Leaderboard.NeedsUpdate has been set to " + value);
+		}
+	}
+
+	// Party state is NOT currently being sent from Rabbit MQ.
+	// Leverage game state.  If "idle", display idle screen.  Else, display the leaderboard.
+	private string partyState {
+		get => game.CurrentGameStateData is not null
+			? game.CurrentGameStateData.Data.GameStatus
+			: "idle";
+	}
 
 	// To access the game state we need
 	// Reference to the Game class instance in the game
@@ -56,6 +79,8 @@ public class Leaderboard : MonoBehaviour {
 		// Destroy all existing player cells
 		//DestroyCells(playerCellParentTop24);
 		//DestroyCells(playerCellParentRemainder);
+
+		//TriggerFlowControl(); "idle"
 	}
 
 	void OnDestroy() {
@@ -63,56 +88,26 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		// Party state is NOT currently being sent.
-		// Leverage game state.  If "idle", display idle screen.  Else, display the leaderboard.
 		if (needsUpdate || game.NeedsUpdate) {
-			var partyState = game.CurrentGameStateData is not null
-				? game.CurrentGameStateData.Data.GameStatus
-				: "qualifiers";
-			TriggerFlowControl(partyState);
+			TriggerFlowControl();
 			switch (partyState) {
 				case "idle":
 					break;
 				default:
-					SetPlayerCells(currentLeaderboardData.Data);
+					SetPlayerCells();
 					break;
 			}
 
-			needsUpdate = false;
+			NeedsUpdate = false;
 		}
 	}
 
 	//void HandleLeaderboardMessage(object obj, BasicDeliverEventArgs eventArgs) {
 	void HandleLeaderboardMessage(IBasicConsumer obj, BasicDeliverEventArgs eventArgs) {
-		var body = eventArgs.Body.ToArray();
-		var message = Encoding.UTF8.GetString(body);
-		var receivedRoutingKey = eventArgs.RoutingKey;
-		var consumerTag = eventArgs.ConsumerTag;
-		Debug.Log($"Consumer [{consumerTag}] received '{receivedRoutingKey}' message: '{message}'");
-
-		if (message.Length > 0) {
-			try {
-				LeaderboardMessage leaderboardMessage = JsonConvert.DeserializeObject<LeaderboardMessage>(message);
-
-				if (!leaderboardMessage.Equals(null) && leaderboardMessage.Type == "leaderboard") {
-					Debug.Log($"Deserialized Message: {leaderboardMessage}");
-
-					// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
-					// Update a variable we can read from the main thread instead.
-					// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-					currentLeaderboardData = leaderboardMessage;
-
-					// Use a flag to let us know when we should update text objects.
-					needsUpdate = true;
-				}
-				else {
-					Debug.LogError("Null Deserialization Result");
-				}
-			}
-			catch (Exception e) {
-				Debug.LogError(e);
-			}
-		}
+		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
+		// Update a variable we can read from the main thread instead.
+		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
+		CurrentLeaderboardData = showControl.GetMessageData<LeaderboardMessage>(eventArgs);;
 	}
 
 	private void DestroyCells(GameObject parent) {
@@ -135,14 +130,16 @@ public class Leaderboard : MonoBehaviour {
 		}
 	}
 
-	private void SetPlayerCells(LeaderboardData leaderboardData) {
-		// Destroy all existing player cells
-		DestroyCells(playerCellParentTop24);
-		DestroyCells(playerCellParentRemainder);
+	private void SetPlayerCells() {
+		if (CurrentLeaderboardData is not null && CurrentLeaderboardData.Data is not null) {
+			// Destroy all existing player cells
+			DestroyCells(playerCellParentTop24);
+			DestroyCells(playerCellParentRemainder);
 
-		foreach (var entry in leaderboardData.Leaderboard) {
-			Debug.Log($"Updating data for rank: {entry.Rank}");
-			SetPlayerCell(entry);
+			foreach (var entry in CurrentLeaderboardData.Data.Leaderboard) {
+				Debug.Log($"Updating data for rank: {entry.Rank}");
+				SetPlayerCell(entry);
+			}
 		}
 	}
 
@@ -174,7 +171,7 @@ public class Leaderboard : MonoBehaviour {
 
 	}
 
-	private void TriggerFlowControl(string partyState) {
+	private void TriggerFlowControl() {
 		Debug.Log($"Triggering flow control for party state: {partyState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.

@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostname: localhost
   username: rmqadmin
-  password: citk0hg05KCtegZ
+  password: MTDXTnpuF0jGwDA
   exchangeName: ex.iaapa-topic
 --- !u!1 &30440029 stripped
 GameObject:
@@ -43336,6 +43336,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameStateQueueName: qu.iaapa-unity-gamestate
   gameStateRoutingKey: '#.gamestate'
+  turnStartQueueName: qu.iaapa-unity-turnstart
+  turnStartRoutingKey: '#.turnstart'
   flowController: {fileID: 151045070}
   runPlayerNames:
   - {fileID: 71238808}
@@ -43351,7 +43353,7 @@ MonoBehaviour:
   - {fileID: 409858724}
   - {fileID: 236819975}
   - {fileID: 1033444892}
-  runPlayerHasCurrentTurns: 
+  activeSlot: 0
   endPlayerNames:
   - {fileID: 777854412}
   - {fileID: 283180303}
