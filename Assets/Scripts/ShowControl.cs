@@ -8,12 +8,7 @@ using System.Text;
 using UnityEngine;
 
 public class ShowControl : MonoBehaviour {
-	[Header("Message Broker")]
-	[SerializeField] string hostname = "localhost";
-	[SerializeField] string username = "rmqadmin";
-	[SerializeField] string password = "MTDXTnpuF0jGwDA";
-	[SerializeField] string exchangeName = "ex.iaapa-topic";
-
+	private string exchangeName;
 	private ConnectionFactory factory;
 	private IConnection connection;
 	private EventingBasicConsumer consumer;
@@ -21,13 +16,29 @@ public class ShowControl : MonoBehaviour {
 	private IModel channel;
 
 	private void Awake() {
-		// Connect to message bus
-		factory = new ConnectionFactory() { HostName = hostname, UserName = username, Password = password};
-		connection = factory.CreateConnection();
-		channel = connection.CreateModel();
+		try {
+			// Get config settings from file
+			// We are not serializing or setting these values here because it includes a password
+			// that should not be committed to version control.
+			string configFilePath = string.Format("{0}/{1}", Application.streamingAssetsPath, "config.json");
+			string configString = Utilities.GetTextFromFile(configFilePath);
+			Config config = JsonConvert.DeserializeObject<Config>(configString);
 
-		// Make sure the message bus exchange we need exists
-		channel.ExchangeDeclare(exchangeName, "topic", false, false, null);
+			if (config is not null && config.MessageBroker is not null) {
+				exchangeName = config.MessageBroker.Exchange;
+
+				// Connect to message broker
+				factory = new ConnectionFactory() { HostName = config.MessageBroker.Host, UserName = config.MessageBroker.User, Password = config.MessageBroker.Pass};
+				connection = factory.CreateConnection();
+				channel = connection.CreateModel();
+
+				// Make sure the message bus exchange we need exists
+				channel.ExchangeDeclare(exchangeName, "topic", false, false, null);
+			}
+		}
+		catch (Exception e) {
+			Debug.LogError(e);
+		}
 	}
 
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {

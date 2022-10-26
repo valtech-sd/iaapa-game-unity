@@ -115,8 +115,7 @@ public class LeaderboardEntry {
 }
 
 [System.Serializable]
-public class LeaderboardMessage
-{
+public class LeaderboardMessage {
 	[JsonProperty("type")]
 	public string Type { get; set; }
 
@@ -128,8 +127,7 @@ public class LeaderboardMessage
 }
 
 
-public class TurnStartData
-{
+public class TurnStartData {
 	[JsonProperty("gameId")]
 	public string GameId { get; set; }
 
@@ -143,8 +141,7 @@ public class TurnStartData
 	public int TurnLengthMs { get; set; }
 }
 
-public class TurnStartMessage
-{
+public class TurnStartMessage {
 	[JsonProperty("type")]
 	public string Type { get; set; }
 
@@ -153,4 +150,20 @@ public class TurnStartMessage
 
 	[JsonProperty("data")]
 	public TurnStartData Data { get; set; }
+}
+
+
+public class MessageBrokerSettings {
+	[JsonProperty("host")]
+	public string Host { get; set; }
+	[JsonProperty("user")]
+	public string User { get; set; }
+	[JsonProperty("pass")]
+	public string Pass { get; set; }
+	[JsonProperty("exchange")]
+	public string Exchange { get; set; }
+}
+public class Config {
+	[JsonProperty("messageBroker")]
+	public MessageBrokerSettings MessageBroker { get; set; }
 }
