@@ -954,8 +954,9 @@ MonoBehaviour:
   leaderboardRoutingKey: '#.leaderboard'
   flowController: {fileID: 746364147}
   playerCell: {fileID: 2296413795653959913, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
-  playerCellParentTop24: {fileID: 771732848}
+  playerCellParentTop: {fileID: 771732848}
   playerCellParentRemainder: {fileID: 1346276772}
+  numberOfTopPlayers: 12
 --- !u!1001 &25918215
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1286,10 +1287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05fb9a5ab8c04faa983a4bc62d514de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hostname: localhost
-  username: rmqadmin
-  password: MTDXTnpuF0jGwDA
-  exchangeName: ex.iaapa-topic
 --- !u!1 &30440029 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5902020385675687957, guid: 491a355746c92c5478e2e4a410d3845f, type: 3}
@@ -43354,6 +43351,8 @@ MonoBehaviour:
   - {fileID: 236819975}
   - {fileID: 1033444892}
   activeSlot: 0
+  activeColor: {r: 0, g: 1, b: 0, a: 1}
+  inactiveColor: {r: 1, g: 1, b: 1, a: 1}
   endPlayerNames:
   - {fileID: 777854412}
   - {fileID: 283180303}

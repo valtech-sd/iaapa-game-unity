@@ -25,10 +25,15 @@ public class Leaderboard : MonoBehaviour {
 	// Reference to the player cell prefab and parent containers
 	[Header("Player Cell")]
 	[SerializeField] GameObject playerCell;
-	[SerializeField] GameObject playerCellParentTop24;
+	[SerializeField] GameObject playerCellParentTop;
 	[SerializeField] GameObject playerCellParentRemainder;
 
 	private GameObject playerCellParent;
+
+	// Number for always-On e
+	[Header("Top Players To Always Display")]
+	[SerializeField] int numberOfTopPlayers = 12;
+
 
 	// Reference to the ShowControl class instance in the game
 	private ShowControl showControl;
@@ -77,8 +82,8 @@ public class Leaderboard : MonoBehaviour {
 		flowControllerComponent = flowController.GetComponent<FlowController>();
 
 		// Destroy all existing player cells
-		//DestroyCells(playerCellParentTop24);
-		//DestroyCells(playerCellParentRemainder);
+		DestroyCells(playerCellParentTop);
+		DestroyCells(playerCellParentRemainder);
 
 		//TriggerFlowControl(); "idle"
 	}
@@ -133,7 +138,7 @@ public class Leaderboard : MonoBehaviour {
 	private void SetPlayerCells() {
 		if (CurrentLeaderboardData is not null && CurrentLeaderboardData.Data is not null) {
 			// Destroy all existing player cells
-			DestroyCells(playerCellParentTop24);
+			DestroyCells(playerCellParentTop);
 			DestroyCells(playerCellParentRemainder);
 
 			foreach (var entry in CurrentLeaderboardData.Data.Leaderboard) {
@@ -144,7 +149,7 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	private void SetPlayerCell(LeaderboardEntry leaderboardEntry) {
-		playerCellParent = (leaderboardEntry.Rank <= 24) ? playerCellParentTop24 : playerCellParentRemainder;
+		playerCellParent = (leaderboardEntry.Rank <= numberOfTopPlayers) ? playerCellParentTop : playerCellParentRemainder;
 
 		var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity, playerCellParent.transform);
 
