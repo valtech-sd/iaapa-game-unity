@@ -238,20 +238,31 @@ public class Game : MonoBehaviour {
 	}
 
 	private void SetPlayerDataForSeats() {
-		foreach (var seat in currentGameStateMessage.Data.Locations) {
-			Debug.Log($"Updating data for seat: {seat}");
-			SetPlayerDataForSeat(seat);
+		if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null  &&
+		currentGameStateMessage.Data.Locations is not null) {
+			// The slots players are displayed in the scene are either:
+			// their seat location (during game load/run)
+			// or their score ranking (during game end).
+			// Sort the seat list in desired order before we update texts.
+			List<Seat> seats = (currentGameState == "end")
+				? currentGameStateMessage.Data.Locations.OrderByDescending(s => s.Score).ToList()
+				: currentGameStateMessage.Data.Locations.OrderBy(s => s.Location).ToList();
+
+			for (var i=0; i<seats.Count; i++) {
+				Debug.Log($"Updating data for seat {i}: {seats[i]}");
+				SetPlayerDataForSeat(seats[i], i);
+			}
 		}
 	}
 
-	private void SetPlayerDataForSeat(Seat playerData) {
-		// Use seat location and game state to determine which slot to populate with data
-		if (_currentGameState == "load" || _currentGameState == "run") {
-			_playerNameTextElement = _runPlayerNameTextComponents[playerData.Location - 1];
-			_playerScoreTextElement = _runPlayerScoreTextComponents[playerData.Location - 1];
-		} else if (_currentGameState == "end") {
-			_playerNameTextElement = _endPlayerNameTextComponents[playerData.Location - 1];
-			_playerScoreTextElement = _endPlayerScoreTextComponents[playerData.Location - 1];
+	private void SetPlayerDataForSeat(Seat playerData, int index) {
+		// Use index passed in to determine which slot to populate with data
+		if (currentGameState == "load" || currentGameState == "run") {
+			_playerNameTextElement = _runPlayerNameTextComponents[index];
+			_playerScoreTextElement = _runPlayerScoreTextComponents[index];
+		} else if (currentGameState == "end") {
+			_playerNameTextElement = _endPlayerNameTextComponents[index];
+			_playerScoreTextElement = _endPlayerScoreTextComponents[index];
 		}
 
 		var color = (playerData.Location == _activeSlot && currentGameState != "end") ? activeColor : inactiveColor;
