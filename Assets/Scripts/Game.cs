@@ -49,12 +49,12 @@ public class Game : MonoBehaviour {
 	//[Header("Game Run Current Turns")]
 	//[SerializeField] bool[] runPlayerHasCurrentTurns;
 	[Header("Game Run Active Turn")]
-	[SerializeField] private int _activeSlot;
+	[SerializeField] private int _activeSlot = 0; //1-6 for player slots, 0 to clear
 	public int activeSlot {
 		get => _activeSlot;
 		private set {
 			_activeSlot = value;
-			Debug.Log("ActiveSlot has been set to " + value);
+			Debug.Log("activeSlot has been set to " + value);
 		}
 	}
 	[SerializeField] private Color activeColor = Color.green;
@@ -88,7 +88,7 @@ public class Game : MonoBehaviour {
 			}
 
 			_currentGameStateMessage = value;
-			Debug.Log("CurrentGameStateData has been set to " + value);
+			Debug.Log("currentGameStateMessage has been set to " + value);
 
 			needsUpdate = true;
 		}
@@ -100,11 +100,11 @@ public class Game : MonoBehaviour {
 		get => _needsUpdate;
 		private set {
 			_needsUpdate = value;
-			Debug.Log("Game.NeedsUpdate has been set to " + value);
+			Debug.Log("Game.needsUpdate has been set to " + value);
 		}
 	}
 
-	public string _currentGameState {
+	public string currentGameState {
 		get => (currentGameStateMessage is not null && currentGameStateMessage.Data is not null)
 			? currentGameStateMessage.Data.GameStatus
 			: "idle";
@@ -115,17 +115,17 @@ public class Game : MonoBehaviour {
 		get => _previousGameState;
 		private set {
 			_previousGameState = value;
-			Debug.Log("PreviousGameState has been set to " + value);
+			Debug.Log("previousGameState has been set to " + value);
 		}
 	}
 
 	// The latest turn start message from Rabbit MQ
-	private TurnStartMessage _currentTurnStartData;
-	public TurnStartMessage currentTurnStartData {
-		get => _currentTurnStartData;
+	private TurnStartMessage _currentTurnStartMessage;
+	public TurnStartMessage currentTurnStartMessage {
+		get => _currentTurnStartMessage;
 		private set {
-			_currentTurnStartData = value;
-			Debug.Log("CurrentTurnStartData has been set to " + value);
+			_currentTurnStartMessage = value;
+			Debug.Log("currentTurnStartData has been set to " + value);
 			_turnSwitched = true;
 		}
 	}
@@ -136,7 +136,7 @@ public class Game : MonoBehaviour {
 		get => _turnSwitched;
 		set {
 			_turnSwitched = value;
-			Debug.Log("TurnSwitched has been set to " + value);
+			Debug.Log("turnSwitched has been set to " + value);
 		}
 	}
 
@@ -181,9 +181,9 @@ public class Game : MonoBehaviour {
 	void Update() {
 		if (_needsUpdate) {
 			Debug.Log("PreviousGameState: " + previousGameState);
-			Debug.Log("CurrentGameState: " + _currentGameState);
-			if (previousGameState != _currentGameState || previousGameState is null) TriggerFlowControl();
-			switch (_currentGameState) {
+			Debug.Log("CurrentGameState: " + currentGameState);
+			if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
+			switch (currentGameState) {
 				case "idle":
 					break;
 				case "load":
@@ -220,7 +220,7 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		currentTurnStartData = _showControl.GetMessageData<TurnStartMessage>(eventArgs);
+		currentTurnStartMessage = _showControl.GetMessageData<TurnStartMessage>(eventArgs);
 	}
 
 	private void ClearPlayerDataForSeats() {
@@ -236,6 +236,7 @@ public class Game : MonoBehaviour {
 			_playerScoreTextElement.color = inactiveColor;
 		}
 	}
+
 	private void SetPlayerDataForSeats() {
 		foreach (var seat in currentGameStateMessage.Data.Locations) {
 			Debug.Log($"Updating data for seat: {seat}");
@@ -253,7 +254,7 @@ public class Game : MonoBehaviour {
 			_playerScoreTextElement = _endPlayerScoreTextComponents[playerData.Location - 1];
 		}
 
-		var color = (playerData.Location == _activeSlot) ? activeColor : inactiveColor;
+		var color = (playerData.Location == _activeSlot && currentGameState != "end") ? activeColor : inactiveColor;
 
 		if (!_playerNameTextElement.Equals(null)) {
 			_playerNameTextElement.text = playerData.PlayerName;
@@ -274,14 +275,14 @@ public class Game : MonoBehaviour {
 	}
 
 	private void TriggerFlowControl() {
-		Debug.Log($"Triggering flow control for game state: {_currentGameState}");
+		Debug.Log($"Triggering flow control for game state: {currentGameState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.
 		// We want to leverage the flow already set up on the button component by invoking it.
 		// HOWEVER, DOOZY BUTTON EVENTS DO NOT SEEM TO WORK FROM SCRIPT AT ALL :-(
 		// We are currently duplicating the events on the buttons here.
 		// If the events in the scene changes, it will also have to manually updated here!
-		switch (_currentGameState) {
+		switch (currentGameState) {
 			case "idle":
 				/*
 				Debug.Log("onClickEvent" + JsonConvert.SerializeObject(idleButtonComponent.onClickEvent));
@@ -318,13 +319,14 @@ public class Game : MonoBehaviour {
 	}
 
 	private void SwitchActivePlayer() {
-		if (currentTurnStartData is not null && currentTurnStartData.Data is not null &&
+		if (currentTurnStartMessage is not null && currentTurnStartMessage.Data is not null &&
 			currentGameStateMessage is not null && currentGameStateMessage.Data is not null && currentGameStateMessage.Data
 			.Locations is not null) {
 
-			string activePlayerId = currentTurnStartData.Data.PlayerId;
+			string activePlayerId = currentTurnStartMessage.Data.PlayerId;
+			Debug.Log("activePlayerId: " + activePlayerId);
 			int activeIndex = currentGameStateMessage.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
-			_activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
+			activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
 
 			/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
 				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);

@@ -44,7 +44,7 @@ public class Leaderboard : MonoBehaviour {
 		get => _currentLeaderboardMessage;
 		set {
 			_currentLeaderboardMessage = value;
-			Debug.Log("CurrentLeaderboardData has been set to " + value);
+			Debug.Log("currentLeaderboardMessage has been set to " + value);
 			needsUpdate = true;
 		}
 	}
@@ -55,7 +55,7 @@ public class Leaderboard : MonoBehaviour {
 		get => _needsUpdate;
 		set {
 			_needsUpdate = value;
-			Debug.Log("Leaderboard.NeedsUpdate has been set to " + value);
+			Debug.Log("Leaderboard.needsUpdate has been set to " + value);
 		}
 	}
 

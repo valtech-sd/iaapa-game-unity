@@ -27,12 +27,18 @@ public enum PartyState {
 	Unknown
 }
 
+public class SerializableAsJson {
+	public override string ToString() {
+		return JsonConvert.SerializeObject(this, Formatting.Indented);
+	}
+}
 
-public class GameFlags {
+public class GameFlags: SerializableAsJson {
 	[JsonProperty("leaderboardEnabled")]
 	public bool LeaderboardEnabled { get; set; }
 }
-public class GameStateData {
+
+public class GameStateData: SerializableAsJson  {
 	[JsonProperty("gameId")]
 	[CanBeNull]
 	public string GameId { get; set; }
@@ -52,13 +58,9 @@ public class GameStateData {
 	[JsonProperty("locations")]
 	[CanBeNull]
 	public List<Seat> Locations { get; set; }
-
-	public override string ToString() {
-		return JsonConvert.SerializeObject(this, Formatting.Indented);
-	}
 }
 
-public class Seat {
+public class Seat: SerializableAsJson  {
 	[JsonProperty("location")]
 	public int Location { get; set; }
 
@@ -70,14 +72,9 @@ public class Seat {
 
 	[JsonProperty("playerId")]
 	public string PlayerId { get; set; }
-
-	public override string ToString() {
-		return JsonConvert.SerializeObject(this, Formatting.Indented);
-	}
 }
 
-[System.Serializable]
-public class GameStateMessage {
+public class GameStateMessage: SerializableAsJson  {
 	[JsonProperty("type")]
 	public string Type { get; set; }
 
@@ -89,9 +86,7 @@ public class GameStateMessage {
 }
 
 
-
-[System.Serializable]
-public class LeaderboardData {
+public class LeaderboardData: SerializableAsJson  {
 	[JsonProperty("leaderboardType")]
 	public string LeaderboardType { get; set; }
 
@@ -99,8 +94,7 @@ public class LeaderboardData {
 	public List<LeaderboardEntry> Leaderboard { get; set; }
 }
 
-[System.Serializable]
-public class LeaderboardEntry {
+public class LeaderboardEntry: SerializableAsJson  {
 	[JsonProperty("rank")]
 	public int Rank { get; set; }
 
@@ -114,8 +108,7 @@ public class LeaderboardEntry {
 	public string PlayerId { get; set; }
 }
 
-[System.Serializable]
-public class LeaderboardMessage {
+public class LeaderboardMessage: SerializableAsJson  {
 	[JsonProperty("type")]
 	public string Type { get; set; }
 
@@ -126,8 +119,7 @@ public class LeaderboardMessage {
 	public LeaderboardData Data { get; set; }
 }
 
-
-public class TurnStartData {
+public class TurnStartData: SerializableAsJson  {
 	[JsonProperty("gameId")]
 	public string GameId { get; set; }
 
@@ -141,7 +133,7 @@ public class TurnStartData {
 	public int TurnLengthMs { get; set; }
 }
 
-public class TurnStartMessage {
+public class TurnStartMessage: SerializableAsJson  {
 	[JsonProperty("type")]
 	public string Type { get; set; }
 
@@ -152,8 +144,7 @@ public class TurnStartMessage {
 	public TurnStartData Data { get; set; }
 }
 
-
-public class MessageBrokerSettings {
+public class MessageBrokerSettings: SerializableAsJson  {
 	[JsonProperty("host")]
 	public string Host { get; set; }
 	[JsonProperty("user")]
@@ -163,7 +154,8 @@ public class MessageBrokerSettings {
 	[JsonProperty("exchange")]
 	public string Exchange { get; set; }
 }
-public class Config {
+
+public class Config: SerializableAsJson  {
 	[JsonProperty("messageBroker")]
 	public MessageBrokerSettings MessageBroker { get; set; }
 }
