@@ -11,24 +11,24 @@ using UnityEngine;
 
 public class Leaderboard : MonoBehaviour {
 	[Header("Message Broker")]
-	[SerializeField] string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
-	[SerializeField] string leaderboardRoutingKey = "#.leaderboard";
+	[SerializeField] private string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
+	[SerializeField] private string leaderboardRoutingKey = "#.leaderboard";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	// WE ARE USING FLOW CONTROLLER DIRECTLY INSTEAD OF ACCESSING THE BUTTON EVENTS DYNAMICALLY
 	// BECAUSE DOOZY BUTTON EVENTS CANNOT BE INVOKED :-(
 	[Header("Flow Controller")]
-	[SerializeField] GameObject flowController;
+	[SerializeField] private GameObject flowController;
 
-	private FlowController flowControllerComponent;
+	private FlowController _flowControllerComponent;
 
 	// Reference to the player cell prefab and parent containers
 	[Header("Player Cell")]
-	[SerializeField] GameObject playerCell;
-	[SerializeField] GameObject playerCellParentTop;
-	[SerializeField] GameObject playerCellParentRemainder;
+	[SerializeField] private GameObject playerCell;
+	[SerializeField] private GameObject playerCellParentTop;
+	[SerializeField] private GameObject playerCellParentRemainder;
 
-	private GameObject playerCellParent;
+	private GameObject _playerCellParent;
 
 	// Number for always-On e
 	[Header("Top Players To Always Display")]
@@ -36,50 +36,54 @@ public class Leaderboard : MonoBehaviour {
 
 
 	// Reference to the ShowControl class instance in the game
-	private ShowControl showControl;
+	private ShowControl _showControl;
 
 	// The latest leaderboard message from Rabbit MQ
-	private LeaderboardMessage currentLeaderboardData;
-	private LeaderboardMessage CurrentLeaderboardData {
-		get => currentLeaderboardData;
+	private LeaderboardMessage _currentLeaderboardMessage;
+	private LeaderboardMessage currentLeaderboardMessage {
+		get => _currentLeaderboardMessage;
 		set {
-			currentLeaderboardData = value;
+			_currentLeaderboardMessage = value;
 			Debug.Log("CurrentLeaderboardData has been set to " + value);
-			NeedsUpdate = true;
+			needsUpdate = true;
 		}
 	}
 
 	// Whether the text elements need updating due to a new game state message
-	private bool needsUpdate = false;
-	private bool NeedsUpdate {
-		get => needsUpdate;
+	private bool _needsUpdate = false;
+	private bool needsUpdate {
+		get => _needsUpdate;
 		set {
-			needsUpdate = value;
+			_needsUpdate = value;
 			Debug.Log("Leaderboard.NeedsUpdate has been set to " + value);
 		}
 	}
 
+
 	// Party state is NOT currently being sent from Rabbit MQ.
 	// Leverage game state.  If "idle", display idle screen.  Else, display the leaderboard.
-	private string partyState {
-		get => game.CurrentGameStateData is not null
-			? game.CurrentGameStateData.Data.GameStatus
+	private string currentPartyState {
+		get => _game.currentGameStateMessage is not null
+			? _game.currentGameStateMessage.Data.GameStatus
 			: "idle";
+	}
+	private string previousPartyState {
+		get => _game.previousGameState;
 	}
 
 	// To access the game state we need
 	// Reference to the Game class instance in the game
-	private Game game;
+	private Game _game;
 
 	// Start is called before the first frame update
 	void Start() {
-		showControl = FindObjectOfType<ShowControl>();
-		showControl.RegisterConsumer(leaderboardQueueName, leaderboardRoutingKey, HandleLeaderboardMessage);
+		_showControl = FindObjectOfType<ShowControl>();
+		_showControl.RegisterConsumer(leaderboardQueueName, leaderboardRoutingKey, HandleLeaderboardMessage);
 
-		game = FindObjectOfType<Game>();
+		_game = FindObjectOfType<Game>();
 
 		// Set Flow Controller Component
-		flowControllerComponent = flowController.GetComponent<FlowController>();
+		_flowControllerComponent = flowController.GetComponent<FlowController>();
 
 		// Destroy all existing player cells
 		DestroyCells(playerCellParentTop);
@@ -93,9 +97,11 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (needsUpdate || game.NeedsUpdate) {
-			TriggerFlowControl();
-			switch (partyState) {
+		if (_needsUpdate || _game.needsUpdate) {
+			Debug.Log("previousPartyState: " + previousPartyState);
+			Debug.Log("currentPartyState: " + currentPartyState);
+			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
+			switch (currentPartyState) {
 				case "idle":
 					break;
 				default:
@@ -103,7 +109,7 @@ public class Leaderboard : MonoBehaviour {
 					break;
 			}
 
-			NeedsUpdate = false;
+			needsUpdate = false;
 		}
 	}
 
@@ -112,7 +118,7 @@ public class Leaderboard : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		CurrentLeaderboardData = showControl.GetMessageData<LeaderboardMessage>(eventArgs);;
+		currentLeaderboardMessage = _showControl.GetMessageData<LeaderboardMessage>(eventArgs);;
 	}
 
 	private void DestroyCells(GameObject parent) {
@@ -136,12 +142,12 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	private void SetPlayerCells() {
-		if (CurrentLeaderboardData is not null && CurrentLeaderboardData.Data is not null) {
+		if (currentLeaderboardMessage is not null && currentLeaderboardMessage.Data is not null) {
 			// Destroy all existing player cells
 			DestroyCells(playerCellParentTop);
 			DestroyCells(playerCellParentRemainder);
 
-			foreach (var entry in CurrentLeaderboardData.Data.Leaderboard) {
+			foreach (var entry in currentLeaderboardMessage.Data.Leaderboard) {
 				Debug.Log($"Updating data for rank: {entry.Rank}");
 				SetPlayerCell(entry);
 			}
@@ -149,9 +155,9 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	private void SetPlayerCell(LeaderboardEntry leaderboardEntry) {
-		playerCellParent = (leaderboardEntry.Rank <= numberOfTopPlayers) ? playerCellParentTop : playerCellParentRemainder;
+		_playerCellParent = (leaderboardEntry.Rank <= numberOfTopPlayers) ? playerCellParentTop : playerCellParentRemainder;
 
-		var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity, playerCellParent.transform);
+		var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity, _playerCellParent.transform);
 
 		/*var rankObject = showControl.FindChildWithTag(newCell, "PlayerRank");
 		var nameObject = showControl.FindChildWithTag(newCell, "PlayerName");
@@ -170,26 +176,26 @@ public class Leaderboard : MonoBehaviour {
 				textComponent.text = leaderboardEntry.Score.ToString();
 			}
 		}
-		Debug.Log($"Adding to {playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
+		Debug.Log($"Adding to {_playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
 
 		//newCell.transform.SetParent(playerCellParent.transform);
 
 	}
 
 	private void TriggerFlowControl() {
-		Debug.Log($"Triggering flow control for party state: {partyState}");
+		Debug.Log($"Triggering flow control for party state: {currentPartyState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.
 		// We want to leverage the flow already set up on the button component by invoking it.
 		// HOWEVER, DOOZY BUTTON EVENTS DO NOT SEEM TO WORK FROM SCRIPT AT ALL :-(
 		// We are currently duplicating the events on the buttons here.
 		// If the events in the scene changes, it will also have to manually updated here!
-		switch (partyState) {
+		switch (currentPartyState) {
 			case "idle":
-				flowControllerComponent.SetActiveNodeByName("Idle");
+				_flowControllerComponent.SetActiveNodeByName("Idle");
 				break;
 			default:
-				flowControllerComponent.SetActiveNodeByName("Leaderboard");
+				_flowControllerComponent.SetActiveNodeByName("Leaderboard");
 				break;
 		}
 	}

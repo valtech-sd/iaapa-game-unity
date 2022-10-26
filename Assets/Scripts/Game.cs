@@ -13,137 +13,151 @@ using UnityEngine;
 
 public class Game : MonoBehaviour {
 	[Header("Message Broker")]
-	[SerializeField] string gameStateQueueName = "qu.iaapa-unity-gamestate";
-	[SerializeField] string gameStateRoutingKey = "#.gamestate";
-	[SerializeField] string turnStartQueueName = "qu.iaapa-unity-turnstart";
-	[SerializeField] string turnStartRoutingKey = "#.turnstart";
+	[SerializeField] private string gameStateQueueName = "qu.iaapa-unity-gamestate";
+	[SerializeField] private string gameStateRoutingKey = "#.gamestate";
+	[SerializeField] private string turnStartQueueName = "qu.iaapa-unity-turnstart";
+	[SerializeField] private string turnStartRoutingKey = "#.turnstart";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Flow Controller")]
-	[SerializeField] GameObject flowController;
+	[SerializeField] private GameObject flowController;
 
-	private FlowController flowControllerComponent;
+	private FlowController _flowControllerComponent;
 
 	/* WE ARE USING FLOW CONTROLLER ABOVE DIRECTLY INSTEAD BECAUSE DOOZY BUTTON EVENTS CANNOT BE INVOKED.
 	THE ISSUE WITH THIS IS WE CAN'T AUTOMATICALLY CALL THE CORRECT FLOW IF THE BUTTON IS UPDATED.
 	WE ALSO HAVE TO DUPLICATE ALL EVENTS CALLED BY THE BUTTON.
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Game State Button Objects")]
-	[SerializeField] GameObject idleButton;
-	[SerializeField] GameObject loadButton;
-	[SerializeField] GameObject runButton;
-	[SerializeField] GameObject endButton;
+	[SerializeField] private GameObject idleButton;
+	[SerializeField] private GameObject loadButton;
+	[SerializeField] private GameObject runButton;
+	[SerializeField] private GameObject endButton;
 
 	// UI Button components from the above button objects
-	private UIButton idleButtonComponent;
-	private UIButton loadButtonComponent;
-	private UIButton runButtonComponent;
-	private UIButton endButtonComponent;
+	private UIButton _idleButtonComponent;
+	private UIButton _loadButtonComponent;
+	private UIButton _runButtonComponent;
+	private UIButton _endButtonComponent;
 	*/
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Game Run Text Objects")]
-	[SerializeField] GameObject[] runPlayerNames;
-	[SerializeField] GameObject[] runPlayerScores;
+	[SerializeField] private GameObject[] runPlayerNames;
+	[SerializeField] private GameObject[] runPlayerScores;
 
 	//[Header("Game Run Current Turns")]
 	//[SerializeField] bool[] runPlayerHasCurrentTurns;
 	[Header("Game Run Active Turn")]
-	[SerializeField] int  activeSlot;
-	public int ActiveSlot {
-		get => activeSlot;
+	[SerializeField] private int _activeSlot;
+	public int activeSlot {
+		get => _activeSlot;
 		private set {
-			activeSlot = value;
+			_activeSlot = value;
 			Debug.Log("ActiveSlot has been set to " + value);
 		}
 	}
-	[SerializeField] Color activeColor = Color.green;
-	[SerializeField] Color inactiveColor = Color.white;
+	[SerializeField] private Color activeColor = Color.green;
+	[SerializeField] private Color inactiveColor = Color.white;
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Game End Text Objects")]
-	[SerializeField] GameObject[] endPlayerNames;
-	[SerializeField] GameObject[] endPlayerScores;
+	[SerializeField] private GameObject[] endPlayerNames;
+	[SerializeField] private GameObject[] endPlayerScores;
 
 	// List of text components from the above text objects
-	private List<TextMeshProUGUI> runPlayerNameTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> runPlayerScoreTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> endPlayerNameTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> endPlayerScoreTextComponents = new List<TextMeshProUGUI>();
+	private List<TextMeshProUGUI> _runPlayerNameTextComponents = new List<TextMeshProUGUI>();
+	private List<TextMeshProUGUI> _runPlayerScoreTextComponents = new List<TextMeshProUGUI>();
+	private List<TextMeshProUGUI> _endPlayerNameTextComponents = new List<TextMeshProUGUI>();
+	private List<TextMeshProUGUI> _endPlayerScoreTextComponents = new List<TextMeshProUGUI>();
 
 	// The current text element to update
-	private TextMeshProUGUI playerNameTextElement;
-	private TextMeshProUGUI playerScoreTextElement;
+	private TextMeshProUGUI _playerNameTextElement;
+	private TextMeshProUGUI _playerScoreTextElement;
 
 	// Reference to the ShowControl class instance in the game
-	private ShowControl showControl;
+	private ShowControl _showControl;
 
 	// The latest game state message from Rabbit MQ
-	private GameStateMessage currentGameStateData;
-	public GameStateMessage CurrentGameStateData {
-		get => currentGameStateData;
+	private GameStateMessage _currentGameStateMessage;
+	public GameStateMessage currentGameStateMessage {
+		get => _currentGameStateMessage;
 		private set {
-			currentGameStateData = value;
+			if (_currentGameStateMessage is not null && _currentGameStateMessage.Data is not null) {
+				previousGameState = _currentGameStateMessage.Data.GameStatus;
+			}
+
+			_currentGameStateMessage = value;
 			Debug.Log("CurrentGameStateData has been set to " + value);
-			NeedsUpdate = true;
+
+			needsUpdate = true;
 		}
 	}
 
 	// Whether the text elements need updating due to a new game state message
-	private bool needsUpdate = false;
-	public bool NeedsUpdate {
-		get => needsUpdate;
+	private bool _needsUpdate = false;
+	public bool needsUpdate {
+		get => _needsUpdate;
 		private set {
-			needsUpdate = value;
+			_needsUpdate = value;
 			Debug.Log("Game.NeedsUpdate has been set to " + value);
 		}
 	}
 
-	private string gameState {
-		get => (CurrentGameStateData is not null && CurrentGameStateData.Data is not null)
-			? CurrentGameStateData.Data.GameStatus
+	public string _currentGameState {
+		get => (currentGameStateMessage is not null && currentGameStateMessage.Data is not null)
+			? currentGameStateMessage.Data.GameStatus
 			: "idle";
 	}
 
-	// The latest turn start message from Rabbit MQ
-	private TurnStartMessage currentTurnStartData;
-	public TurnStartMessage CurrentTurnStartData {
-		get => currentTurnStartData;
+	private string _previousGameState;
+	public string previousGameState {
+		get => _previousGameState;
 		private set {
-			currentTurnStartData = value;
+			_previousGameState = value;
+			Debug.Log("PreviousGameState has been set to " + value);
+		}
+	}
+
+	// The latest turn start message from Rabbit MQ
+	private TurnStartMessage _currentTurnStartData;
+	public TurnStartMessage currentTurnStartData {
+		get => _currentTurnStartData;
+		private set {
+			_currentTurnStartData = value;
 			Debug.Log("CurrentTurnStartData has been set to " + value);
-			turnSwitched = true;
+			_turnSwitched = true;
 		}
 	}
 
 	// Whether the player whose turn it is has switched
-	private bool turnSwitched = false;
-	private bool TurnSwitched {
-		get => turnSwitched;
+	private bool _turnSwitched = false;
+	private bool turnSwitched {
+		get => _turnSwitched;
 		set {
-			turnSwitched = value;
+			_turnSwitched = value;
 			Debug.Log("TurnSwitched has been set to " + value);
 		}
 	}
 
 	// Reference to Timer class instance in the game
-	private Timer timer;
+	private Timer _timer;
 
 	// Start is called before the first frame update
 	void Start() {
-		showControl = FindObjectOfType<ShowControl>();
-		showControl.RegisterConsumer(gameStateQueueName, gameStateRoutingKey, HandleGameStateMessage);
-		showControl.RegisterConsumer(turnStartQueueName, turnStartRoutingKey, HandleTurnStartMessage);
+		_showControl = FindObjectOfType<ShowControl>();
+		_showControl.RegisterConsumer(gameStateQueueName, gameStateRoutingKey, HandleGameStateMessage);
+		_showControl.RegisterConsumer(turnStartQueueName, turnStartRoutingKey, HandleTurnStartMessage);
 
-		timer = FindObjectOfType<Timer>();
+		_timer = FindObjectOfType<Timer>();
 
 		// We need to find and set components here because will get "can only be run in main thread" error from RabbitMQ handler
 
 		// Set Text Components
-		AddTextComponentToList(runPlayerNames, runPlayerNameTextComponents);
-		AddTextComponentToList(runPlayerScores, runPlayerScoreTextComponents);
-		AddTextComponentToList(endPlayerNames, endPlayerNameTextComponents);
-		AddTextComponentToList(endPlayerScores, endPlayerScoreTextComponents);
+		AddTextComponentToList(runPlayerNames, _runPlayerNameTextComponents);
+		AddTextComponentToList(runPlayerScores, _runPlayerScoreTextComponents);
+		AddTextComponentToList(endPlayerNames, _endPlayerNameTextComponents);
+		AddTextComponentToList(endPlayerScores, _endPlayerScoreTextComponents);
 
 		/* WE ARE USING FLOW CONTROLLER DIRECTLY INSTEAD BECAUSE DOOZY BUTTON EVENTS CANNOT BE INVOKED.
 		THE ISSUE WITH THIS IS WE CAN'T AUTOMATICALLY CALL THE CORRECT FLOW IF THE BUTTON IS UPDATED.
@@ -156,7 +170,7 @@ public class Game : MonoBehaviour {
 		*/
 
 		// Set Flow Controller Component
-		flowControllerComponent = flowController.GetComponent<FlowController>();
+		_flowControllerComponent = flowController.GetComponent<FlowController>();
 
 		//TriggerFlowControl(); //idle
 	}
@@ -165,9 +179,11 @@ public class Game : MonoBehaviour {
 	}
 
 	void Update() {
-		if (needsUpdate) {
-			TriggerFlowControl();
-			switch (gameState) {
+		if (_needsUpdate) {
+			Debug.Log("PreviousGameState: " + previousGameState);
+			Debug.Log("CurrentGameState: " + _currentGameState);
+			if (previousGameState != _currentGameState || previousGameState is null) TriggerFlowControl();
+			switch (_currentGameState) {
 				case "idle":
 					break;
 				case "load":
@@ -183,12 +199,12 @@ public class Game : MonoBehaviour {
 					break;
 			}
 
-			NeedsUpdate = false;
+			needsUpdate = false;
 		}
 
-		if (turnSwitched) {
+		if (_turnSwitched) {
 			SwitchActivePlayer();
-			TurnSwitched = false;
+			turnSwitched = false;
 		}
 	}
 	//void HandleGameStateMessage(object obj, BasicDeliverEventArgs eventArgs) {
@@ -196,7 +212,7 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		CurrentGameStateData = showControl.GetMessageData<GameStateMessage>(eventArgs);
+		currentGameStateMessage = _showControl.GetMessageData<GameStateMessage>(eventArgs);
 	}
 
 
@@ -204,11 +220,24 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		CurrentTurnStartData = showControl.GetMessageData<TurnStartMessage>(eventArgs);
+		currentTurnStartData = _showControl.GetMessageData<TurnStartMessage>(eventArgs);
 	}
 
+	private void ClearPlayerDataForSeats() {
+		for (var i = 0; i < runPlayerNames.Length; i++) {
+			Debug.Log($"Clearing data for index: {i}");
+			_playerNameTextElement = _runPlayerNameTextComponents[i];
+			_playerScoreTextElement = _runPlayerScoreTextComponents[i];
+
+			_playerNameTextElement.text = "";
+			_playerNameTextElement.color = inactiveColor;
+
+			_playerScoreTextElement.text = "0";
+			_playerScoreTextElement.color = inactiveColor;
+		}
+	}
 	private void SetPlayerDataForSeats() {
-		foreach (var seat in CurrentGameStateData.Data.Locations) {
+		foreach (var seat in currentGameStateMessage.Data.Locations) {
 			Debug.Log($"Updating data for seat: {seat}");
 			SetPlayerDataForSeat(seat);
 		}
@@ -216,24 +245,24 @@ public class Game : MonoBehaviour {
 
 	private void SetPlayerDataForSeat(Seat playerData) {
 		// Use seat location and game state to determine which slot to populate with data
-		if (gameState == "load" || gameState == "run") {
-			playerNameTextElement = runPlayerNameTextComponents[playerData.Location - 1];
-			playerScoreTextElement = runPlayerScoreTextComponents[playerData.Location - 1];
-		} else if (gameState == "end") {
-			playerNameTextElement = endPlayerNameTextComponents[playerData.Location - 1];
-			playerScoreTextElement = endPlayerScoreTextComponents[playerData.Location - 1];
+		if (_currentGameState == "load" || _currentGameState == "run") {
+			_playerNameTextElement = _runPlayerNameTextComponents[playerData.Location - 1];
+			_playerScoreTextElement = _runPlayerScoreTextComponents[playerData.Location - 1];
+		} else if (_currentGameState == "end") {
+			_playerNameTextElement = _endPlayerNameTextComponents[playerData.Location - 1];
+			_playerScoreTextElement = _endPlayerScoreTextComponents[playerData.Location - 1];
 		}
 
-		var color = (playerData.Location == activeSlot) ? activeColor : inactiveColor;
+		var color = (playerData.Location == _activeSlot) ? activeColor : inactiveColor;
 
-		if (!playerNameTextElement.Equals(null)) {
-			playerNameTextElement.text = playerData.PlayerName;
-			playerNameTextElement.color = color;
+		if (!_playerNameTextElement.Equals(null)) {
+			_playerNameTextElement.text = playerData.PlayerName;
+			_playerNameTextElement.color = color;
 		}
 
-		if (!playerScoreTextElement.Equals(null)) {
-			playerScoreTextElement.text = playerData.Score.ToString();
-			playerScoreTextElement.color = color;
+		if (!_playerScoreTextElement.Equals(null)) {
+			_playerScoreTextElement.text = playerData.Score.ToString();
+			_playerScoreTextElement.color = color;
 		}
 
 	}
@@ -245,14 +274,14 @@ public class Game : MonoBehaviour {
 	}
 
 	private void TriggerFlowControl() {
-		Debug.Log($"Triggering flow control for game state: {gameState}");
+		Debug.Log($"Triggering flow control for game state: {_currentGameState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.
 		// We want to leverage the flow already set up on the button component by invoking it.
 		// HOWEVER, DOOZY BUTTON EVENTS DO NOT SEEM TO WORK FROM SCRIPT AT ALL :-(
 		// We are currently duplicating the events on the buttons here.
 		// If the events in the scene changes, it will also have to manually updated here!
-		switch (gameState) {
+		switch (_currentGameState) {
 			case "idle":
 				/*
 				Debug.Log("onClickEvent" + JsonConvert.SerializeObject(idleButtonComponent.onClickEvent));
@@ -261,9 +290,10 @@ public class Game : MonoBehaviour {
 				//idleButtonComponent.Click(true);
 				//idleButtonComponent.onSelectedEvent.Invoke();
 				*/
-				flowControllerComponent.SetActiveNodeByName("Idle");
+				_flowControllerComponent.SetActiveNodeByName("Idle");
 				break;
 			case "load":
+				ClearPlayerDataForSeats();
 				/*
 				Debug.Log("onClickEvent" + JsonConvert.SerializeObject(loadButtonComponent.onClickEvent));
 				Debug.Log("onSelectedEvent" + JsonConvert.SerializeObject(loadButtonComponent.onSelectedEvent));
@@ -271,31 +301,36 @@ public class Game : MonoBehaviour {
 				//loadButtonComponent.Click(true);
 				//loadButtonComponent.onSelectedEvent.Invoke();
 				*/
-				flowControllerComponent.SetActiveNodeByName("Game");
+				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
 			case "run":
 				//
 				//runButtonComponent.onClickEvent.Invoke();
-				flowControllerComponent.SetActiveNodeByName("Game");
-				timer.startTimer();
+				_flowControllerComponent.SetActiveNodeByName("Game");
+				_timer.startTimer();
 				break;
 			case "end":
 				//
 				//endButtonComponent.onClickEvent.Invoke();
-				flowControllerComponent.SetActiveNodeByName("GameEnd");
+				_flowControllerComponent.SetActiveNodeByName("GameEnd");
 				break;
 		}
 	}
 
 	private void SwitchActivePlayer() {
-		string activePlayerId = currentTurnStartData.Data.PlayerId;
-		int activeIndex = currentGameStateData.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
-		activeSlot = currentGameStateData.Data.Locations[activeIndex].Location;
+		if (currentTurnStartData is not null && currentTurnStartData.Data is not null &&
+			currentGameStateMessage is not null && currentGameStateMessage.Data is not null && currentGameStateMessage.Data
+			.Locations is not null) {
 
-		/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
-			runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
-		}*/
+			string activePlayerId = currentTurnStartData.Data.PlayerId;
+			int activeIndex = currentGameStateMessage.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
+			_activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
 
-		NeedsUpdate = true;
+			/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
+				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
+			}*/
+
+			needsUpdate = true;
+		}
 	}
 }
