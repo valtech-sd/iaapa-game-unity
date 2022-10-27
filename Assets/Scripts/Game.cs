@@ -305,7 +305,9 @@ public class Game : MonoBehaviour {
 				_flowControllerComponent.SetActiveNodeByName("Idle");
 				break;
 			case "load":
+				_timer.showTimer = false;
 				ClearPlayerDataForSeats();
+
 				/*
 				Debug.Log("onClickEvent" + JsonConvert.SerializeObject(loadButtonComponent.onClickEvent));
 				Debug.Log("onSelectedEvent" + JsonConvert.SerializeObject(loadButtonComponent.onSelectedEvent));
@@ -316,13 +318,34 @@ public class Game : MonoBehaviour {
 				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
 			case "run":
-				//
+				if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null
+					//&& currentGameStateMessage.Timestamp != default(long) &&
+					&& currentGameStateMessage.Data.GameStartTimestamp.HasValue
+					// && currentGameStateMessage.Data.GameEndTimestamp.HasValue
+					&& currentGameStateMessage.Data.GameLength.HasValue
+				) {
+					//var nowInMs = currentGameStateMessage.Timestamp;
+					var nowInMs = DateTimeOffset.Now.ToUnixTimeMilliseconds(); //currently 5 seconds after game start ts!
+
+					var countdownToGameStartInSeconds =
+						((currentGameStateMessage.Data.GameStartTimestamp ?? default (long)) - nowInMs) / 1000f;
+
+					//var gameLengthInSeconds = ((currentGameStateMessage.Data.GameEndTimestamp ?? default(long)) -
+					//(currentGameStateMessage.Data.GameStartTimestamp ?? default(long))) / 1000f;
+					var gameLengthInSeconds = (currentGameStateMessage.Data.GameLength ?? default(long)) / 1000f;
+
+					_timer.StartTimer(countdownToGameStartInSeconds);
+
+					StartCoroutine(Utilities.ExecuteAfterTime(countdownToGameStartInSeconds, () => {
+						_timer.StartTimer(gameLengthInSeconds);
+					}));
+				}
+				//_timer.showTimer = true;
+
 				//runButtonComponent.onClickEvent.Invoke();
 				_flowControllerComponent.SetActiveNodeByName("Game");
-				_timer.startTimer();
 				break;
 			case "end":
-				//
 				//endButtonComponent.onClickEvent.Invoke();
 				_flowControllerComponent.SetActiveNodeByName("GameEnd");
 				break;

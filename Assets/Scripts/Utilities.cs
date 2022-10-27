@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using System.IO;
 using UnityEngine;
 
@@ -16,5 +18,14 @@ public static class Utilities {
 
 		//Debug.Log("Read from file: " + output);
 		return output;
+	}
+
+	private static bool isCoroutineExecuting = false;
+	public static IEnumerator ExecuteAfterTime(float delayInSeconds, Action task) {
+		if (isCoroutineExecuting) yield break;
+		isCoroutineExecuting = true;
+		yield return new WaitForSeconds(delayInSeconds);
+		task();
+		isCoroutineExecuting = false;
 	}
 }

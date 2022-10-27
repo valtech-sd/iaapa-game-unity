@@ -51,6 +51,14 @@ public class GameStateData: SerializableAsJson  {
 	[CanBeNull]
 	public long? GameStartTimestamp { get; set; } //in milliseconds
 
+	[JsonProperty("gameEndTimestamp")]
+	[CanBeNull]
+	public long? GameEndTimestamp { get; set; } //in milliseconds
+
+	[JsonProperty("gameLengthMs")]
+	[CanBeNull]
+	public long? GameLength { get; set; } //in milliseconds
+
 	[JsonProperty("flags")]
 	[CanBeNull]
 	public GameFlags Flags { get; set; }

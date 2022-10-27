@@ -2,29 +2,36 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 public class Timer : MonoBehaviour {
-	[SerializeField] bool timerIsRunning = false;
-	private const float defaultTotalTime = 60;
-	private float timeRemaining = defaultTotalTime;
-	private Text timerText;
+	private bool _showTimer = false;
+	public bool showTimer {
+		get => _showTimer;
+		set {
+			_showTimer = value;
+			Debug.Log("showTimer has been set to " + value);
+		}
+	}
+
+	private const float k_DefaultTotalTimeInSeconds = 60;
+	private float _timeRemaining = k_DefaultTotalTimeInSeconds;
+	private Text _timerText;
 
 	private void Start() {
-		// Starts the timer automatically
-		//timerIsRunning = true;
-
 		// Get the sibling Text component in the Game Object this script is attached to
-		timerText = GetComponent<Text>();
+		_timerText = GetComponent<Text>();
 	}
 	void Update() {
-		if (timerIsRunning) {
-			if (timeRemaining > 0) {
-				timeRemaining -= Time.deltaTime;
-				DisplayTime(timeRemaining);
+		if (showTimer) {
+			if (_timeRemaining > 0) {
+				_timeRemaining -= Time.deltaTime;
+				DisplayTime(_timeRemaining);
 			}
 			else {
-				Debug.Log("Time has run out!");
-				timeRemaining = 0;
-				timerIsRunning = false;
+				Debug.Log("Time is up!");
+				_timeRemaining = 0;
 			}
+		}
+		else {
+			_timerText.text = "";
 		}
 	}
 	void DisplayTime(float timeToDisplay) {
@@ -35,17 +42,18 @@ public class Timer : MonoBehaviour {
 		//Debug.Log("minutes: " + minutes);
 		//Debug.Log("seconds: " + seconds);
 
-		timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
+		_timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
 	}
 
-	public void startTimer(float totalTime = defaultTotalTime) {
-		timeRemaining = totalTime;
-		timerIsRunning = true;
+	public void StartTimer(float totalTime = k_DefaultTotalTimeInSeconds) {
+		Debug.Log("StartTimer: " + totalTime);
+		_timeRemaining = totalTime;
+		showTimer = true;
 	}
 
-	public void resetTimerAndWait(float totalTime = defaultTotalTime) {
-		timeRemaining = totalTime;
-		DisplayTime(timeRemaining);
-		timerIsRunning = false;
+	public void ResetTimerAndWait(float totalTime = k_DefaultTotalTimeInSeconds) {
+		_timeRemaining = totalTime;
+		DisplayTime(_timeRemaining);
+		showTimer = false;
 	}
 }
