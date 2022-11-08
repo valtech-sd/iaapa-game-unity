@@ -3151,7 +3151,7 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 2103856287}
+          - m_Target: {fileID: 1599702260}
             m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_MethodName: SetActive
             m_Mode: 6
@@ -5535,6 +5535,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 84291261}
   m_CullTransparentMesh: 1
+--- !u!1 &88511800 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2866535861832577927, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
+  m_PrefabInstance: {fileID: 787592816}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &88714459
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5841,8 +5846,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 167776758}
   m_HandleRect: {fileID: 167776757}
   m_Direction: 2
-  m_Value: 0.9999998
-  m_Size: 0.2722019
+  m_Value: 0.9999996
+  m_Size: 0.27220193
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -10175,17 +10180,17 @@ MonoBehaviour:
               m_StringArgument: Game
               m_BoolArgument: 0
             m_CallState: 2
-          - m_Target: {fileID: 0}
-            m_TargetAssemblyTypeName: Timer, Assembly-CSharp
-            m_MethodName: startTimer
-            m_Mode: 1
+          - m_Target: {fileID: 1685431670}
+            m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+            m_MethodName: SetActive
+            m_Mode: 6
             m_Arguments:
               m_ObjectArgument: {fileID: 0}
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
               m_StringArgument: 
-              m_BoolArgument: 0
+              m_BoolArgument: 1
             m_CallState: 2
   SelectedState:
     StateType: 3
@@ -10704,11 +10709,6 @@ RectTransform:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
   m_PrefabInstance: {fileID: 137976460}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &226917228 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2866535861832577927, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
-  m_PrefabInstance: {fileID: 183983049}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &229622480
 GameObject:
@@ -17803,6 +17803,11 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
   m_PrefabInstance: {fileID: 1951419468}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &506989778 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3056907799606391898, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
+  m_PrefabInstance: {fileID: 787592816}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &509322467
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20312,15 +20317,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5042153554462166475, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5042153554462166475, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5042153554462166475, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 152.7
+      value: 137.6
       objectReference: {fileID: 0}
     - target: {fileID: 5759369551901322548, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
       propertyPath: m_SizeDelta.x
@@ -20362,7 +20367,8 @@ PrefabInstance:
       propertyPath: Animation.Scale.CurrentValue.z
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 919579450491792383, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
 --- !u!224 &787592817 stripped
 RectTransform:
@@ -31907,11 +31913,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
   m_PrefabInstance: {fileID: 1510757883}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1510847673 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3056907799606391898, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
-  m_PrefabInstance: {fileID: 183983049}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1533232067
 GameObject:
   m_ObjectHideFlags: 0
@@ -34915,6 +34916,11 @@ PrefabInstance:
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
   m_PrefabInstance: {fileID: 1598248254}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1599702260 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6320039797147648853, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
+  m_PrefabInstance: {fileID: 787592816}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1611659342
 PrefabInstance:
@@ -45069,11 +45075,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2094026602}
   m_CullTransparentMesh: 1
---- !u!1 &2103856287 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6320039797147648853, guid: 9702866ae6fffae418a26c656ed5b959, type: 3}
-  m_PrefabInstance: {fileID: 183983049}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2114277173
 GameObject:
   m_ObjectHideFlags: 0
@@ -47035,7 +47036,7 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 1510847673}
+          - m_Target: {fileID: 506989778}
             m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_MethodName: SetActive
             m_Mode: 6
@@ -49715,7 +49716,7 @@ MonoBehaviour:
       Event:
         m_PersistentCalls:
           m_Calls:
-          - m_Target: {fileID: 226917228}
+          - m_Target: {fileID: 88511800}
             m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
             m_MethodName: SetActive
             m_Mode: 6
