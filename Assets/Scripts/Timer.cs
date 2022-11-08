@@ -32,7 +32,7 @@ public class Timer : MonoBehaviour {
 			}
 		}
 		else {
-			_timerText.text = "";
+			_timerText.text = "00:00";
 		}
 	}
 	void DisplayTime(float timeToDisplay) {
