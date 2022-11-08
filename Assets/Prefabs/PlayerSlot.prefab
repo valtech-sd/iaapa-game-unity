@@ -224,6 +224,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerSeat (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5902020385046051200, guid: 491a355746c92c5478e2e4a410d3845f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5902020385046051203, guid: 491a355746c92c5478e2e4a410d3845f, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
