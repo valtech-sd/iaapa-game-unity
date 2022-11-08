@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class Timer : MonoBehaviour {
 	private bool _showTimer = false;
 	public bool showTimer {
@@ -13,11 +14,11 @@ public class Timer : MonoBehaviour {
 
 	private const float k_DefaultTotalTimeInSeconds = 60;
 	private float _timeRemaining = k_DefaultTotalTimeInSeconds;
-	private Text _timerText;
+	private TextMeshProUGUI _timerText;
 
 	private void Start() {
 		// Get the sibling Text component in the Game Object this script is attached to
-		_timerText = GetComponent<Text>();
+		_timerText = GetComponent<TextMeshProUGUI>();
 	}
 	void Update() {
 		if (showTimer) {
