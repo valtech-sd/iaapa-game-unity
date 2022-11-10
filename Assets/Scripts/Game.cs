@@ -8,8 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Doozy.Runtime.Reactor.Animators;
+using Doozy.Runtime.UIManager;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Game : MonoBehaviour {
 	[Header("Message Broker")]
@@ -40,14 +43,17 @@ public class Game : MonoBehaviour {
 	private UIButton _runButtonComponent;
 	private UIButton _endButtonComponent;
 	*/
+	[Header("Slides")]
+	[SerializeField] private GameObject[] slides;
+
+	[Header("Timer Container")]
+	[SerializeField] private GameObject timerContainer;
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
-	[Header("Game Run Text Objects")]
-	[SerializeField] private GameObject[] runPlayerNames;
-	[SerializeField] private GameObject[] runPlayerScores;
 
-	//[Header("Game Run Current Turns")]
-	//[SerializeField] bool[] runPlayerHasCurrentTurns;
+	[Header("Player Seats")]
+	[SerializeField] private GameObject[] playerSeats;
+
 	[Header("Game Run Active Turn")]
 	[SerializeField] private int _activeSlot = 0; //1-6 for player slots, 0 to clear
 	public int activeSlot {
@@ -57,21 +63,25 @@ public class Game : MonoBehaviour {
 			Debug.Log("activeSlot has been set to " + value);
 		}
 	}
-	[SerializeField] private Color activeColor = Color.green;
-	[SerializeField] private Color inactiveColor = Color.white;
 
-	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
-	[Header("Game End Text Objects")]
-	[SerializeField] private GameObject[] endPlayerNames;
-	[SerializeField] private GameObject[] endPlayerScores;
+	private int _numberOfCountdownSlides = 5;
 
-	// List of text components from the above text objects
-	private List<TextMeshProUGUI> _runPlayerNameTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> _runPlayerScoreTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> _endPlayerNameTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> _endPlayerScoreTextComponents = new List<TextMeshProUGUI>();
+	// List of objects we activate/deactivate
+	private List<GameObject> _playerColors = new List<GameObject>();
+	private List<GameObject> _playerColorOutlines = new List<GameObject>();
+	private List<GameObject> _playerPointsBg = new List<GameObject>();
+	private List<GameObject> _rank1 = new List<GameObject>();
+	private List<GameObject> _rank2 = new List<GameObject>();
+	private List<GameObject> _rank3 = new List<GameObject>();
 
-	// The current text element to update
+	// List of color animators
+	private List<ColorAnimator> _playerColorAnimators = new List<ColorAnimator>();
+
+	// List of player texts we update
+	private List<TextMeshProUGUI> _playerNameTextComponents = new List<TextMeshProUGUI>();
+	private List<TextMeshProUGUI> _playerScoreTextComponents = new List<TextMeshProUGUI>();
+
+	// The current player text element to update
 	private TextMeshProUGUI _playerNameTextElement;
 	private TextMeshProUGUI _playerScoreTextElement;
 
@@ -149,15 +159,10 @@ public class Game : MonoBehaviour {
 		_showControl.RegisterConsumer(gameStateQueueName, gameStateRoutingKey, HandleGameStateMessage);
 		_showControl.RegisterConsumer(turnStartQueueName, turnStartRoutingKey, HandleTurnStartMessage);
 
-		_timer = FindObjectOfType<Timer>();
-
 		// We need to find and set components here because will get "can only be run in main thread" error from RabbitMQ handler
 
-		// Set Text Components
-		AddTextComponentToList(runPlayerNames, _runPlayerNameTextComponents);
-		AddTextComponentToList(runPlayerScores, _runPlayerScoreTextComponents);
-		AddTextComponentToList(endPlayerNames, _endPlayerNameTextComponents);
-		AddTextComponentToList(endPlayerScores, _endPlayerScoreTextComponents);
+		// Set Needed Components
+		SetComponents();
 
 		/* WE ARE USING FLOW CONTROLLER DIRECTLY INSTEAD BECAUSE DOOZY BUTTON EVENTS CANNOT BE INVOKED.
 		THE ISSUE WITH THIS IS WE CAN'T AUTOMATICALLY CALL THE CORRECT FLOW IF THE BUTTON IS UPDATED.
@@ -186,16 +191,8 @@ public class Game : MonoBehaviour {
 			switch (currentGameState) {
 				case "idle":
 					break;
-				case "load":
-					SetPlayerDataForSeats();
-					break;
-				case "run":
-					SetPlayerDataForSeats();
-					break;
-				case "end":
-					SetPlayerDataForSeats();
-					break;
 				default:
+					SetPlayerDataForSeats();
 					break;
 			}
 
@@ -223,70 +220,205 @@ public class Game : MonoBehaviour {
 		currentTurnStartMessage = _showControl.GetMessageData<TurnStartMessage>(eventArgs);
 	}
 
-	private void ClearPlayerDataForSeats() {
-		for (var i = 0; i < runPlayerNames.Length; i++) {
-			Debug.Log($"Clearing data for index: {i}");
-			_playerNameTextElement = _runPlayerNameTextComponents[i];
-			_playerScoreTextElement = _runPlayerScoreTextComponents[i];
+	private void ResetSeats() {
+		timerContainer.SetActive(false);
+		slides[0].SetActive(true);
+		slides[1].SetActive(false);
+		slides[2].SetActive(false);
+		slides[3].SetActive(false);
+		slides[4].SetActive(false);
+		slides[5].SetActive(false);
 
+		for (var i = 0; i < playerSeats.Length; i++) {
+			Debug.Log($"Resetting seat index {i}");
+			_playerNameTextElement = _playerNameTextComponents[i];
+			_playerScoreTextElement = _playerScoreTextComponents[i];
 			_playerNameTextElement.text = "";
-			_playerNameTextElement.color = inactiveColor;
-
 			_playerScoreTextElement.text = "0";
-			_playerScoreTextElement.color = inactiveColor;
+
+			DeActivateSeat(i);
+			_playerColorOutlines[i].SetActive(false);
+			_playerPointsBg[i].SetActive(false);
+
+			_rank1[i].SetActive(false);
+			_rank2[i].SetActive(false);
+			_rank3[i].SetActive(false);
+
+			playerSeats[i].SetActive(false);
 		}
 	}
 
 	private void SetPlayerDataForSeats() {
 		if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null  &&
 		currentGameStateMessage.Data.Locations is not null) {
-			// The slots players are displayed in the scene are either:
-			// their seat location (during game load/run)
-			// or their score ranking (during game end).
-			// Sort the seat list in desired order before we update texts.
-			List<Seat> seats = (currentGameState == "end")
-				? currentGameStateMessage.Data.Locations.OrderByDescending(s => s.Score).ToList()
-				: currentGameStateMessage.Data.Locations.OrderBy(s => s.Location).ToList();
-
+			List<Seat> seats = currentGameStateMessage.Data.Locations.OrderBy(s => s.Location).ToList();
 			for (var i=0; i<seats.Count; i++) {
-				Debug.Log($"Updating data for seat {i}: {seats[i]}");
-				SetPlayerDataForSeat(seats[i], i);
+				Debug.Log($"Updating data for seat index {i}: {seats[i]}");
+				if (currentGameState == "end") {
+					List<Seat> winners = currentGameStateMessage.Data.Locations.OrderByDescending(s => s.Score).ToList();
+					var rankIndex = winners.FindIndex(w => w.Location == i + 1);
+					Debug.Log("Seat " + (i+1) + " has rank " + (rankIndex + 1));
+					SetPlayerDataForSeat(seats[i], i, rankIndex);
+				}
+				else {
+					SetPlayerDataForSeat(seats[i], i);
+				}
 			}
 		}
 	}
 
-	private void SetPlayerDataForSeat(Seat playerData, int index) {
+	private void SetPlayerDataForSeat(Seat playerData, int index, int rankIndex=-1) {
 		// Use index passed in to determine which slot to populate with data
-		if (currentGameState == "load" || currentGameState == "run") {
-			_playerNameTextElement = _runPlayerNameTextComponents[index];
-			_playerScoreTextElement = _runPlayerScoreTextComponents[index];
-		} else if (currentGameState == "end") {
-			_playerNameTextElement = _endPlayerNameTextComponents[index];
-			_playerScoreTextElement = _endPlayerScoreTextComponents[index];
-		}
-
-		var color = (playerData.Location == _activeSlot && currentGameState != "end") ? activeColor : inactiveColor;
+		_playerNameTextElement = _playerNameTextComponents[index];
+		_playerScoreTextElement = _playerScoreTextComponents[index];
 
 		if (!_playerNameTextElement.Equals(null)) {
+			if (currentGameState == "load") {
+				playerSeats[index].SetActive(true);
+				_playerColorOutlines[index].SetActive(true);
+				//if (_playerColorAnimators[index].isActiveAndEnabled) _playerColorAnimators[index].Reverse();
+				//_playerNameTextElement.color = Color.black;
+			}
 			_playerNameTextElement.text = playerData.PlayerName;
-			_playerNameTextElement.color = color;
 		}
 
 		if (!_playerScoreTextElement.Equals(null)) {
 			_playerScoreTextElement.text = playerData.Score.ToString();
-			_playerScoreTextElement.color = color;
+			if (playerData.Score > 0) _playerPointsBg[index].SetActive(true);
 		}
 
+		if (timerContainer.activeSelf && playerData.Location == _activeSlot && currentGameState != "end") {
+			ActivateSeat(index);
+		}
+		else {
+			DeActivateSeat(index);
+		}
+
+		if (currentGameState == "end") {
+			if (rankIndex == 0) {
+				_rank1[index].SetActive(true);
+			}
+			else if (rankIndex == 1) {
+				_rank2[index].SetActive(true);
+			}
+			else if (rankIndex == 2) {
+				_rank3[index].SetActive(true);
+			}
+		}
 	}
 
-	private void AddTextComponentToList(GameObject[] gameObjects, List<TextMeshProUGUI> textComponents) {
-		foreach (var obj in gameObjects) {
-			textComponents.Add(obj.GetComponent<TextMeshProUGUI>());
+	private void Countdown() {
+		if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null
+			//&& currentGameStateMessage.Timestamp != default(long) &&
+			&& currentGameStateMessage.Data.GameStartTimestamp.HasValue
+			// && currentGameStateMessage.Data.GameEndTimestamp.HasValue
+			&& currentGameStateMessage.Data.GameLength.HasValue
+		) {
+			var nowInMs = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+			var countdownToGameStartInSeconds =
+				((currentGameStateMessage.Data.GameStartTimestamp ?? default (long)) - nowInMs) / 1000f;
+			Debug.Log("countdownToGameStartInSeconds: " + countdownToGameStartInSeconds);
+
+			//var gameLengthInSeconds = ((currentGameStateMessage.Data.GameEndTimestamp ?? default(long)) -
+			//(currentGameStateMessage.Data.GameStartTimestamp ?? default(long))) / 1000f;
+			var gameLengthInSeconds = (currentGameStateMessage.Data.GameLength ?? default(long)) / 1000f;
+			Debug.Log("gameLengthInSeconds: " + gameLengthInSeconds);
+
+
+			// Countdown to Game Start
+			var delayBeforeCountdownToStart = countdownToGameStartInSeconds - _numberOfCountdownSlides;
+			if (delayBeforeCountdownToStart > 0) {
+				StartCoroutine(Utilities.ExecuteAfterTime(delayBeforeCountdownToStart, () => CountdownToGameStart()));
+			}
+			else {
+				CountdownToGameStart();
+			}
+
+
+
+			// Countdown to Game End
+			StartCoroutine(Utilities.ExecuteAfterTime(countdownToGameStartInSeconds, () => {
+				// Activate timer
+				timerContainer.SetActive(true);
+				_timer = FindObjectOfType<Timer>();
+
+				CountdownToGameEnd(gameLengthInSeconds);
+			}));
+		}
+		else {
+			Debug.LogError("Missing required data for game countdown in " + currentGameStateMessage);
+		}
+	}
+	private void CountdownToGameStart() {
+		Debug.Log("Counting down to game start");
+		//_timer.StartTimer(countdownToGameStartInSeconds);
+		slides[0].SetActive(false);
+		for (var i = 1; i <= _numberOfCountdownSlides; i++) {
+			slides[i].SetActive(true);
+		}
+		ActivateAllSeats();
+	}
+
+	private void CountdownToGameEnd(float gameLengthInSeconds) {
+		Debug.Log("Counting down to game end");
+		_timer.StartTimer(gameLengthInSeconds);
+
+		/*for (var i = 0; i < playerSeats.Length; i++) {
+			_playerPointsBg[i].SetActive(true);
+		}*/
+	}
+	private void ActivateAllSeats() {
+		for (var i = 0; i < playerSeats.Length; i++) {
+			ActivateSeat(i);
+		}
+	}
+	private void ActivateSeat(int index) {
+		_playerColors[index].SetActive(true);
+		_playerColorAnimators[index].Play();
+	}
+	private void DeActivateSeat(int index) {
+		_playerColors[index].SetActive(false);
+		//if (_playerColorAnimators[index].isActiveAndEnabled) _playerColorAnimators[index].Reverse();
+		_playerNameTextComponents[index].color = Color.black;
+	}
+
+	private void SetComponents() {
+		Debug.Log("Setting components for all " + playerSeats.Length + " seats");
+		for(var i=0; i< playerSeats.Length; i++) {
+			var seatObj = playerSeats[i];
+			//Debug.Log("Seat " + i + " has " + seatObj.transform.childCount + "children") ;
+			foreach (Transform child in seatObj.transform) {
+				//Debug.Log("Found "+ child.name +" for seat " + i);
+				if (child.name == "PlayerName") {
+					_playerNameTextComponents.Add(child.GetComponent<TextMeshProUGUI>());
+					_playerColorAnimators.Add(child.GetComponent<ColorAnimator>());
+				}
+				else if (child.name == "PlayerColor") {
+					_playerColors.Add(child.gameObject);
+				}
+				else if (child.name == "PlayerColorOutline") {
+					_playerColorOutlines.Add(child.gameObject);
+				}
+				else if (child.name == "PointsBG") {
+					_playerPointsBg.Add(child.gameObject);
+					_playerScoreTextComponents.Add(child.GetComponentInChildren<TextMeshProUGUI>());
+				}
+				else if (child.name == "Rank1") {
+					_rank1.Add(child.gameObject);
+				}
+				else if (child.name == "Rank2") {
+					_rank2.Add(child.gameObject);
+				}
+				else if (child.name == "Rank3") {
+					_rank3.Add(child.gameObject);
+				}
+			}
 		}
 	}
 
 	private void TriggerFlowControl() {
-		Debug.Log($"Triggering flow control for game state: {currentGameState}");
+		Debug.Log($"Changing game state to {currentGameState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.
 		// We want to leverage the flow already set up on the button component by invoking it.
@@ -305,8 +437,7 @@ public class Game : MonoBehaviour {
 				_flowControllerComponent.SetActiveNodeByName("Idle");
 				break;
 			case "load":
-				_timer.showTimer = false;
-				ClearPlayerDataForSeats();
+				ResetSeats();
 
 				/*
 				Debug.Log("onClickEvent" + JsonConvert.SerializeObject(loadButtonComponent.onClickEvent));
@@ -318,36 +449,16 @@ public class Game : MonoBehaviour {
 				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
 			case "run":
-				if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null
-					//&& currentGameStateMessage.Timestamp != default(long) &&
-					&& currentGameStateMessage.Data.GameStartTimestamp.HasValue
-					// && currentGameStateMessage.Data.GameEndTimestamp.HasValue
-					&& currentGameStateMessage.Data.GameLength.HasValue
-				) {
-					//var nowInMs = currentGameStateMessage.Timestamp;
-					var nowInMs = DateTimeOffset.Now.ToUnixTimeMilliseconds(); //currently 5 seconds after game start ts!
-
-					var countdownToGameStartInSeconds =
-						((currentGameStateMessage.Data.GameStartTimestamp ?? default (long)) - nowInMs) / 1000f;
-
-					//var gameLengthInSeconds = ((currentGameStateMessage.Data.GameEndTimestamp ?? default(long)) -
-					//(currentGameStateMessage.Data.GameStartTimestamp ?? default(long))) / 1000f;
-					var gameLengthInSeconds = (currentGameStateMessage.Data.GameLength ?? default(long)) / 1000f;
-
-					_timer.StartTimer(countdownToGameStartInSeconds);
-
-					StartCoroutine(Utilities.ExecuteAfterTime(countdownToGameStartInSeconds, () => {
-						_timer.StartTimer(gameLengthInSeconds);
-					}));
-				}
-				//_timer.showTimer = true;
+				Countdown();
 
 				//runButtonComponent.onClickEvent.Invoke();
 				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
 			case "end":
+				timerContainer.SetActive(false);
+				ActivateAllSeats();
 				//endButtonComponent.onClickEvent.Invoke();
-				_flowControllerComponent.SetActiveNodeByName("GameEnd");
+				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
 		}
 	}

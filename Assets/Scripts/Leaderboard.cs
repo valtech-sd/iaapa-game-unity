@@ -183,7 +183,7 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	private void TriggerFlowControl() {
-		Debug.Log($"Triggering flow control for party state: {currentPartyState}");
+		Debug.Log($"Changing party state to {currentPartyState}");
 
 		// The UIButton component uses FlowController to animate navigation to another page.
 		// We want to leverage the flow already set up on the button component by invoking it.
