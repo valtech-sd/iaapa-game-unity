@@ -6,8 +6,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class ShowControl : MonoBehaviour {
+	[SerializeField] private GameObject[] _winners;
+	public GameObject[] winners {
+		get => _winners;
+		private set {
+			_winners = value;
+			Debug.Log("winners has been set to " + value);
+		}
+	}
+
 	private string exchangeName;
 	private ConnectionFactory factory;
 	private IConnection connection;
@@ -40,6 +50,7 @@ public class ShowControl : MonoBehaviour {
 			Debug.LogError(e);
 		}
 	}
+
 
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
 	public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, BasicDeliverEventHandler
