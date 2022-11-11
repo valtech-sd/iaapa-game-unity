@@ -23187,7 +23187,7 @@ GameObject:
   - component: {fileID: 771732849}
   - component: {fileID: 771732850}
   m_Layer: 0
-  m_Name: LeaderBoard Top24
+  m_Name: LeaderBoard Top 12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -26692,19 +26692,7 @@ MonoBehaviour:
       Runners: []
       Event:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 151045071}
-            m_TargetAssemblyTypeName: Doozy.Runtime.Nody.FlowController, Assembly-CSharp
-            m_MethodName: SetActiveNodeByName
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Game
-              m_BoolArgument: 0
-            m_CallState: 2
+          m_Calls: []
   DisabledState:
     StateType: 4
     StateEvent:
@@ -37958,7 +37946,7 @@ MonoBehaviour:
               m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
               m_IntArgument: 0
               m_FloatArgument: 0
-              m_StringArgument: GameEnd
+              m_StringArgument: Gam
               m_BoolArgument: 0
             m_CallState: 2
   SelectedState:
@@ -42601,19 +42589,7 @@ MonoBehaviour:
       Runners: []
       Event:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 151045071}
-            m_TargetAssemblyTypeName: Doozy.Runtime.Nody.FlowController, Assembly-CSharp
-            m_MethodName: SetActiveNodeByName
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Idle
-              m_BoolArgument: 0
-            m_CallState: 2
+          m_Calls: []
   DisabledState:
     StateType: 4
     StateEvent:
@@ -62701,19 +62677,7 @@ MonoBehaviour:
       Runners: []
       Event:
         m_PersistentCalls:
-          m_Calls:
-          - m_Target: {fileID: 151045071}
-            m_TargetAssemblyTypeName: Doozy.Runtime.Nody.FlowController, Assembly-CSharp
-            m_MethodName: SetActiveNodeByName
-            m_Mode: 5
-            m_Arguments:
-              m_ObjectArgument: {fileID: 0}
-              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-              m_IntArgument: 0
-              m_FloatArgument: 0
-              m_StringArgument: Idle
-              m_BoolArgument: 0
-            m_CallState: 2
+          m_Calls: []
   DisabledState:
     StateType: 4
     StateEvent:
