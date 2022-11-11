@@ -17968,8 +17968,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        StartDelay: 8
-        Duration: 2
+        StartDelay: 4
+        Duration: 1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -19247,8 +19247,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        StartDelay: 4
-        Duration: 2
+        StartDelay: 2
+        Duration: 1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -46058,8 +46058,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        StartDelay: 2
-        Duration: 2
+        StartDelay: 1
+        Duration: 1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -48006,7 +48006,7 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
         StartDelay: 0
-        Duration: 2
+        Duration: 1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
@@ -55279,8 +55279,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 4
-        StartDelay: 6
-        Duration: 2
+        StartDelay: 3
+        Duration: 1
         Loops: 0
         LoopDelay: 0
         UseRandomStartDelay: 0
