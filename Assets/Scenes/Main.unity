@@ -3445,7 +3445,7 @@ Canvas:
   m_GameObject: {fileID: 27739797}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 2129483245}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -6090,7 +6090,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 167776757}
   m_Direction: 2
   m_Value: 0.9999998
-  m_Size: 0.2722019
+  m_Size: 0.27220193
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -19935,7 +19935,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1798975559021a34289b5d0d66d8966d, type: 2}
+  - {fileID: 2100000, guid: 126e0200193a8b543a577cf194b61a45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -31123,7 +31123,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1798975559021a34289b5d0d66d8966d, type: 2}
+  - {fileID: 2100000, guid: fc57a36f345222047b2842d02a20c48c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
