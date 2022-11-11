@@ -53,6 +53,87 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam4"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""34a0702b-45fe-4cc4-8b48-f15ae8a6818c"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam5"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""88a5edad-6ab5-41df-8b79-a9964ec2f9c9"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam6"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""f23b372d-4794-438b-b8d6-3ab02d35b55d"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam7"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ce980f04-d611-4bf2-9a0e-335aa78499ac"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam8"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""98395b3a-945d-4548-97a9-303c166ef234"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam9"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""4c48973e-adc1-40b0-a207-d76437f40760"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam10"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""f29099e3-bb69-444c-9dff-2c2ee1c95522"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam11"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""a1fa6696-ed95-452f-9fb2-5e60610fd7c1"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchCam12"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""d34e1d90-3ee7-4743-8a40-f169b7b1ee4e"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -88,6 +169,105 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                     ""action"": ""SwitchCam3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa267699-925b-4705-bc67-6f4f49596aee"",
+                    ""path"": ""<Keyboard>/4"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam4"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""41b55968-849a-45c7-8d15-26e041ef9197"",
+                    ""path"": ""<Keyboard>/5"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam5"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""03974b91-fc4e-44a1-bd93-965565b9a937"",
+                    ""path"": ""<Keyboard>/6"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam6"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""172869d9-4c3b-4a8b-869d-279842cb3f50"",
+                    ""path"": ""<Keyboard>/7"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam7"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d5a88ed9-d76d-49f2-8d85-8138e638c309"",
+                    ""path"": ""<Keyboard>/8"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam8"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9aab5876-c0cd-4799-ae20-cd61ab0fe985"",
+                    ""path"": ""<Keyboard>/9"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam9"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a04875c3-28ba-45d0-a917-15b614864c61"",
+                    ""path"": ""<Keyboard>/0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam10"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63880185-29bb-4e3e-a3e7-6583c75e903d"",
+                    ""path"": ""<Keyboard>/minus"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam11"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f29f5b70-d607-4578-a006-bb991d1e2df5"",
+                    ""path"": ""<Keyboard>/equals"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwitchCam12"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -99,6 +279,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         m_Player_SwitchCam1 = m_Player.FindAction("SwitchCam1", throwIfNotFound: true);
         m_Player_SwitchCam2 = m_Player.FindAction("SwitchCam2", throwIfNotFound: true);
         m_Player_SwitchCam3 = m_Player.FindAction("SwitchCam3", throwIfNotFound: true);
+        m_Player_SwitchCam4 = m_Player.FindAction("SwitchCam4", throwIfNotFound: true);
+        m_Player_SwitchCam5 = m_Player.FindAction("SwitchCam5", throwIfNotFound: true);
+        m_Player_SwitchCam6 = m_Player.FindAction("SwitchCam6", throwIfNotFound: true);
+        m_Player_SwitchCam7 = m_Player.FindAction("SwitchCam7", throwIfNotFound: true);
+        m_Player_SwitchCam8 = m_Player.FindAction("SwitchCam8", throwIfNotFound: true);
+        m_Player_SwitchCam9 = m_Player.FindAction("SwitchCam9", throwIfNotFound: true);
+        m_Player_SwitchCam10 = m_Player.FindAction("SwitchCam10", throwIfNotFound: true);
+        m_Player_SwitchCam11 = m_Player.FindAction("SwitchCam11", throwIfNotFound: true);
+        m_Player_SwitchCam12 = m_Player.FindAction("SwitchCam12", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -161,6 +350,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SwitchCam1;
     private readonly InputAction m_Player_SwitchCam2;
     private readonly InputAction m_Player_SwitchCam3;
+    private readonly InputAction m_Player_SwitchCam4;
+    private readonly InputAction m_Player_SwitchCam5;
+    private readonly InputAction m_Player_SwitchCam6;
+    private readonly InputAction m_Player_SwitchCam7;
+    private readonly InputAction m_Player_SwitchCam8;
+    private readonly InputAction m_Player_SwitchCam9;
+    private readonly InputAction m_Player_SwitchCam10;
+    private readonly InputAction m_Player_SwitchCam11;
+    private readonly InputAction m_Player_SwitchCam12;
     public struct PlayerActions
     {
         private @PlayerControls m_Wrapper;
@@ -168,6 +366,15 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         public InputAction @SwitchCam1 => m_Wrapper.m_Player_SwitchCam1;
         public InputAction @SwitchCam2 => m_Wrapper.m_Player_SwitchCam2;
         public InputAction @SwitchCam3 => m_Wrapper.m_Player_SwitchCam3;
+        public InputAction @SwitchCam4 => m_Wrapper.m_Player_SwitchCam4;
+        public InputAction @SwitchCam5 => m_Wrapper.m_Player_SwitchCam5;
+        public InputAction @SwitchCam6 => m_Wrapper.m_Player_SwitchCam6;
+        public InputAction @SwitchCam7 => m_Wrapper.m_Player_SwitchCam7;
+        public InputAction @SwitchCam8 => m_Wrapper.m_Player_SwitchCam8;
+        public InputAction @SwitchCam9 => m_Wrapper.m_Player_SwitchCam9;
+        public InputAction @SwitchCam10 => m_Wrapper.m_Player_SwitchCam10;
+        public InputAction @SwitchCam11 => m_Wrapper.m_Player_SwitchCam11;
+        public InputAction @SwitchCam12 => m_Wrapper.m_Player_SwitchCam12;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -186,6 +393,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SwitchCam3.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam3;
                 @SwitchCam3.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam3;
                 @SwitchCam3.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam3;
+                @SwitchCam4.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam4;
+                @SwitchCam4.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam4;
+                @SwitchCam4.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam4;
+                @SwitchCam5.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam5;
+                @SwitchCam5.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam5;
+                @SwitchCam5.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam5;
+                @SwitchCam6.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam6;
+                @SwitchCam6.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam6;
+                @SwitchCam6.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam6;
+                @SwitchCam7.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam7;
+                @SwitchCam7.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam7;
+                @SwitchCam7.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam7;
+                @SwitchCam8.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam8;
+                @SwitchCam8.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam8;
+                @SwitchCam8.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam8;
+                @SwitchCam9.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam9;
+                @SwitchCam9.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam9;
+                @SwitchCam9.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam9;
+                @SwitchCam10.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam10;
+                @SwitchCam10.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam10;
+                @SwitchCam10.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam10;
+                @SwitchCam11.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam11;
+                @SwitchCam11.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam11;
+                @SwitchCam11.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam11;
+                @SwitchCam12.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam12;
+                @SwitchCam12.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam12;
+                @SwitchCam12.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSwitchCam12;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -199,6 +433,33 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
                 @SwitchCam3.started += instance.OnSwitchCam3;
                 @SwitchCam3.performed += instance.OnSwitchCam3;
                 @SwitchCam3.canceled += instance.OnSwitchCam3;
+                @SwitchCam4.started += instance.OnSwitchCam4;
+                @SwitchCam4.performed += instance.OnSwitchCam4;
+                @SwitchCam4.canceled += instance.OnSwitchCam4;
+                @SwitchCam5.started += instance.OnSwitchCam5;
+                @SwitchCam5.performed += instance.OnSwitchCam5;
+                @SwitchCam5.canceled += instance.OnSwitchCam5;
+                @SwitchCam6.started += instance.OnSwitchCam6;
+                @SwitchCam6.performed += instance.OnSwitchCam6;
+                @SwitchCam6.canceled += instance.OnSwitchCam6;
+                @SwitchCam7.started += instance.OnSwitchCam7;
+                @SwitchCam7.performed += instance.OnSwitchCam7;
+                @SwitchCam7.canceled += instance.OnSwitchCam7;
+                @SwitchCam8.started += instance.OnSwitchCam8;
+                @SwitchCam8.performed += instance.OnSwitchCam8;
+                @SwitchCam8.canceled += instance.OnSwitchCam8;
+                @SwitchCam9.started += instance.OnSwitchCam9;
+                @SwitchCam9.performed += instance.OnSwitchCam9;
+                @SwitchCam9.canceled += instance.OnSwitchCam9;
+                @SwitchCam10.started += instance.OnSwitchCam10;
+                @SwitchCam10.performed += instance.OnSwitchCam10;
+                @SwitchCam10.canceled += instance.OnSwitchCam10;
+                @SwitchCam11.started += instance.OnSwitchCam11;
+                @SwitchCam11.performed += instance.OnSwitchCam11;
+                @SwitchCam11.canceled += instance.OnSwitchCam11;
+                @SwitchCam12.started += instance.OnSwitchCam12;
+                @SwitchCam12.performed += instance.OnSwitchCam12;
+                @SwitchCam12.canceled += instance.OnSwitchCam12;
             }
         }
     }
@@ -208,5 +469,14 @@ public partial class @PlayerControls : IInputActionCollection2, IDisposable
         void OnSwitchCam1(InputAction.CallbackContext context);
         void OnSwitchCam2(InputAction.CallbackContext context);
         void OnSwitchCam3(InputAction.CallbackContext context);
+        void OnSwitchCam4(InputAction.CallbackContext context);
+        void OnSwitchCam5(InputAction.CallbackContext context);
+        void OnSwitchCam6(InputAction.CallbackContext context);
+        void OnSwitchCam7(InputAction.CallbackContext context);
+        void OnSwitchCam8(InputAction.CallbackContext context);
+        void OnSwitchCam9(InputAction.CallbackContext context);
+        void OnSwitchCam10(InputAction.CallbackContext context);
+        void OnSwitchCam11(InputAction.CallbackContext context);
+        void OnSwitchCam12(InputAction.CallbackContext context);
     }
 }
