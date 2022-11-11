@@ -192,7 +192,7 @@ public class Leaderboard : MonoBehaviour {
 		// If the events in the scene changes, it will also have to manually updated here!
 		switch (currentPartyState) {
 			case "idle":
-				_flowControllerComponent.SetActiveNodeByName("Idle");
+				//_flowControllerComponent.SetActiveNodeByName("Idle");
 				break;
 			default:
 				_flowControllerComponent.SetActiveNodeByName("Leaderboard");
