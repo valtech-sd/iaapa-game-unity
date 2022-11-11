@@ -93,9 +93,10 @@ public class Leaderboard : MonoBehaviour {
 
 	void Update() {
 		if (needsUpdate || _game.needsUpdate) {
-			Debug.Log("previousPartyState: " + previousPartyState);
-			Debug.Log("currentPartyState: " + currentPartyState);
+			//Debug.Log("previousPartyState: " + previousPartyState);
+			//Debug.Log("currentPartyState: " + currentPartyState);
 			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
+
 			switch (currentPartyState) {
 				case "idle":
 					break;

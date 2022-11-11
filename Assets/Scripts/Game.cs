@@ -171,9 +171,10 @@ public class Game : MonoBehaviour {
 
 	void Update() {
 		if (_needsUpdate) {
-			Debug.Log("PreviousGameState: " + previousGameState);
-			Debug.Log("CurrentGameState: " + currentGameState);
+			//Debug.Log("PreviousGameState: " + previousGameState);
+			//Debug.Log("CurrentGameState: " + currentGameState);
 			if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
+
 			switch (currentGameState) {
 				case "idle":
 					break;
@@ -222,7 +223,7 @@ public class Game : MonoBehaviour {
 			_playerNameTextElement.text = "";
 			_playerScoreTextElement.text = "0";
 
-			DeActivateSeat(i);
+			DeactivateSeat(i);
 			_playerColorOutlines[i].SetActive(false);
 			_playerPointsBg[i].SetActive(false);
 
@@ -262,8 +263,6 @@ public class Game : MonoBehaviour {
 			if (currentGameState == "load") {
 				playerSeats[index].SetActive(true);
 				_playerColorOutlines[index].SetActive(true);
-				//if (_playerColorAnimators[index].isActiveAndEnabled) _playerColorAnimators[index].Reverse();
-				//_playerNameTextElement.color = Color.black;
 			}
 			_playerNameTextElement.text = playerData.PlayerName;
 		}
@@ -273,14 +272,18 @@ public class Game : MonoBehaviour {
 			if (playerData.Score > 0) _playerPointsBg[index].SetActive(true);
 		}
 
-		if (timerContainer.activeSelf && playerData.Location == _activeSlot && currentGameState != "end") {
-			ActivateSeat(index);
-		}
-		else {
-			DeActivateSeat(index);
+		if (currentGameState == "run") {
+			if (playerData.Location == _activeSlot || !timerContainer.activeSelf) {
+				ActivateSeat(index);
+			}
+			else {
+				DeactivateSeat(index);
+			}
 		}
 
 		if (currentGameState == "end") {
+			ActivateSeat(index);
+
 			if (rankIndex == 0) {
 				_rank1[index].SetActive(true);
 			}
@@ -311,7 +314,6 @@ public class Game : MonoBehaviour {
 			var gameLengthInSeconds = (currentGameStateMessage.Data.GameLength ?? default(long)) / 1000f;
 			Debug.Log("gameLengthInSeconds: " + gameLengthInSeconds);
 
-
 			// Countdown to Game Start
 			/*var delayBeforeCountdownToStart = countdownToGameStartInSeconds - _numberOfCountdownSlides;
 			if (delayBeforeCountdownToStart > 0) {
@@ -320,8 +322,6 @@ public class Game : MonoBehaviour {
 			else {*/
 				CountdownToGameStart();
 			//}
-
-
 
 			// Countdown to Game End
 			StartCoroutine(Utilities.ExecuteAfterTime(countdownToGameStartInSeconds, () => {
@@ -343,7 +343,7 @@ public class Game : MonoBehaviour {
 		for (var i = 1; i <= _numberOfCountdownSlides; i++) {
 			slides[i].SetActive(true);
 		}
-		ActivateAllSeats();
+		//ActivateAllSeats();
 	}
 
 	private void CountdownToGameEnd(float gameLengthInSeconds) {
@@ -354,16 +354,19 @@ public class Game : MonoBehaviour {
 			_playerPointsBg[i].SetActive(true);
 		}*/
 	}
-	private void ActivateAllSeats() {
+	/*private void ActivateAllSeats() {
+		Debug.Log($"playerSeats.Length: {playerSeats.Length}");
 		for (var i = 0; i < playerSeats.Length; i++) {
-			ActivateSeat(i);
+			if (playerSeats[i].activeSelf) ActivateSeat(i);
 		}
-	}
+	}*/
 	private void ActivateSeat(int index) {
+		Debug.Log($"Activating seat {index}");
 		_playerColors[index].SetActive(true);
 		_playerColorAnimators[index].Play();
 	}
-	private void DeActivateSeat(int index) {
+	private void DeactivateSeat(int index) {
+		Debug.Log($"Deactivating seat {index}");
 		_playerColors[index].SetActive(false);
 		//if (_playerColorAnimators[index].isActiveAndEnabled) _playerColorAnimators[index].Reverse();
 		_playerNameTextComponents[index].color = Color.black;
@@ -371,7 +374,7 @@ public class Game : MonoBehaviour {
 
 	private void SetComponents() {
 		Debug.Log("Setting components for all " + playerSeats.Length + " seats");
-		for(var i=0; i< playerSeats.Length; i++) {
+		for(var i=0; i < playerSeats.Length; i++) {
 			var seatObj = playerSeats[i];
 			//Debug.Log("Seat " + i + " has " + seatObj.transform.childCount + "children") ;
 			foreach (Transform child in seatObj.transform) {
@@ -442,7 +445,7 @@ public class Game : MonoBehaviour {
 				break;
 			case "end":
 				timerContainer.SetActive(false);
-				ActivateAllSeats();
+				//ActivateAllSeats();
 				//endButtonComponent.onClickEvent.Invoke();
 				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
