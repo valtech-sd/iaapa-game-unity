@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
 public class Timer : MonoBehaviour {
 	private bool _showTimer = false;
@@ -52,9 +51,4 @@ public class Timer : MonoBehaviour {
 		showTimer = true;
 	}
 
-	public void ResetTimerAndWait(float totalTime = k_DefaultTotalTimeInSeconds) {
-		_timeRemaining = totalTime;
-		DisplayTime(_timeRemaining);
-		showTimer = false;
-	}
 }

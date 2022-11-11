@@ -1,12 +1,7 @@
 using Doozy.Runtime.Nody;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Linq;
-using System.Text;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour {
@@ -97,7 +92,7 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_needsUpdate || _game.needsUpdate) {
+		if (needsUpdate || _game.needsUpdate) {
 			Debug.Log("previousPartyState: " + previousPartyState);
 			Debug.Log("currentPartyState: " + currentPartyState);
 			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
@@ -118,7 +113,7 @@ public class Leaderboard : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		currentLeaderboardMessage = _showControl.GetMessageData<LeaderboardMessage>(eventArgs);;
+		currentLeaderboardMessage = _showControl.GetMessageData<LeaderboardMessage>(eventArgs);
 	}
 
 	private void DestroyCells(GameObject parent) {

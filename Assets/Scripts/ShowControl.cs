@@ -6,9 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
-using TMPro;
 
 public class ShowControl : MonoBehaviour {
 	[SerializeField] private GameObject[] _winners;
@@ -20,16 +17,12 @@ public class ShowControl : MonoBehaviour {
 		}
 	}
 
-	private string exchangeName;
-	private ConnectionFactory factory;
-	private IConnection connection;
-	private EventingBasicConsumer consumer;
+	private string _exchangeName;
+	private ConnectionFactory _factory;
+	private IConnection _connection;
+	private EventingBasicConsumer _consumer;
 
-	private IModel channel;
-
-
-	// Reference to the Tournament class instance in the game
-	private Tournament _tournament;
+	private IModel _channel;
 
 	private void Awake() {
 		try {
@@ -41,15 +34,15 @@ public class ShowControl : MonoBehaviour {
 			Config config = JsonConvert.DeserializeObject<Config>(configString);
 
 			if (config is not null && config.MessageBroker is not null) {
-				exchangeName = config.MessageBroker.Exchange;
+				_exchangeName = config.MessageBroker.Exchange;
 
 				// Connect to message broker
-				factory = new ConnectionFactory() { HostName = config.MessageBroker.Host, UserName = config.MessageBroker.User, Password = config.MessageBroker.Pass};
-				connection = factory.CreateConnection();
-				channel = connection.CreateModel();
+				_factory = new ConnectionFactory() { HostName = config.MessageBroker.Host, UserName = config.MessageBroker.User, Password = config.MessageBroker.Pass};
+				_connection = _factory.CreateConnection();
+				_channel = _connection.CreateModel();
 
 				// Make sure the message bus exchange we need exists
-				channel.ExchangeDeclare(exchangeName, "topic", false, false, null);
+				_channel.ExchangeDeclare(_exchangeName, "topic", false, false, null);
 			}
 		}
 		catch (Exception e) {
@@ -57,53 +50,27 @@ public class ShowControl : MonoBehaviour {
 		}
 	}
 
-	private void Start() {
-		_tournament = FindObjectOfType<Tournament>();
-
-		/*for (var i = 0; i < winners.Length; i++) {
-			var winner = winners[i];
-			foreach (Transform child in winner.transform) {
-				var inputField = child.gameObject.GetComponentInChildren<TMP_InputField>();
-				if (child.name == "Name") {
-					inputField.onValueChanged.AddListener(delegate {
-
-						var text = child.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
-						Debug.Log($"Detected value change for winner{i} name to '{text}'");
-						_tournament.SetName(i, text);
-					});
-				}
-				else if (child.name == "Score") {
-					inputField.onValueChanged.AddListener(delegate {
-						var text = child.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
-						Debug.Log($"Detected value change for winner{i} score to '{text}'");
-						_tournament.SetScore(i, text);
-					});
-				}
-			}
-		}*/
-	}
-
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
 	public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, BasicDeliverEventHandler
 	handler) {
 		// Make sure exchange is bound to queue
-		Debug.Log($"Binding '{messageBusQueueName}' queue to '{exchangeName}' exchange with '{messageBusRoutingKey}' routing key.");
-		channel.QueueBind(queue: messageBusQueueName,
-			exchange: exchangeName, routingKey: messageBusRoutingKey);
+		Debug.Log($"Binding '{messageBusQueueName}' queue to '{_exchangeName}' exchange with '{messageBusRoutingKey}' routing key.");
+		_channel.QueueBind(queue: messageBusQueueName,
+			exchange: _exchangeName, routingKey: messageBusRoutingKey);
 
 		Debug.Log($"Waiting for messages from '{messageBusQueueName}' queue.");
 
-		consumer = new EventingBasicConsumer(channel);
-		consumer.Received += handler;
-		channel.BasicConsume(queue: messageBusQueueName,
+		_consumer = new EventingBasicConsumer(_channel);
+		_consumer.Received += handler;
+		_channel.BasicConsume(queue: messageBusQueueName,
 			//autoAck: true,
 			noAck: true,
-			consumer: consumer);
+			consumer: _consumer);
 	}
 
 	//public void UnRegisterConsumer(EventHandler<BasicDeliverEventArgs> handler) {
 	public void UnRegisterConsumer(BasicDeliverEventHandler handler) {
-		consumer.Received -= handler;
+		_consumer.Received -= handler;
 	}
 
 	public T GetMessageData<T>(BasicDeliverEventArgs eventArgs) {
@@ -121,7 +88,7 @@ public class ShowControl : MonoBehaviour {
 			}
 			catch (Exception e) {
 				Debug.LogError(e);
-				throw e;
+				throw;
 			}
 		}
 
@@ -129,24 +96,24 @@ public class ShowControl : MonoBehaviour {
 	}
 
 
-	public GameObject FindChildWithTag(GameObject parent, string tag) {
+	public GameObject FindChildWithTag(GameObject parent, string childTag) {
 		GameObject child = null;
 
-		foreach(Transform transform in parent.transform) {
-			if(transform.CompareTag(tag)) {
-				child = transform.gameObject;
+		foreach(Transform childTransform in parent.transform) {
+			if(childTransform.CompareTag(childTag)) {
+				child = childTransform.gameObject;
 				break;
 			}
 		}
 
 		return child;
 	}
-	public List<GameObject> FindChildrenWithTag(GameObject parent, string tag) {
+	public List<GameObject> FindChildrenWithTag(GameObject parent, string childTag) {
 		List<GameObject> children = new List<GameObject>();
 
-		foreach(Transform transform in parent.transform) {
-			if(transform.CompareTag(tag)) {
-				children.Add(transform.gameObject);
+		foreach(Transform childTransform in parent.transform) {
+			if(childTransform.CompareTag(childTag)) {
+				children.Add(childTransform.gameObject);
 				break;
 			}
 		}
@@ -154,9 +121,9 @@ public class ShowControl : MonoBehaviour {
 		return children;
 	}
 
-	public GameObject FindChildWithName(GameObject obj, string name) {
+	public GameObject FindChildWithName(GameObject obj, string childName) {
 		Transform trans = obj.transform;
-		Transform childTrans = trans.Find(name);
+		Transform childTrans = trans.Find(childName);
 		if (childTrans != null) {
 			return childTrans.gameObject;
 		} else {
@@ -165,24 +132,3 @@ public class ShowControl : MonoBehaviour {
 	}
 
 }
-
-
-/**
- * NOTE(S):
- * - This project uses .NET standard 2.1
- *		- See Unity Editor > Edit > Project Settings > Player > Other Settings > Configuration
- *		- https://learn.microsoft.com/en-us/visualstudio/gamedev/unity/unity-scripting-upgrade#enabling-the-net-4x-scripting-runtime-in-unity
- *
- * - CymaticLabs created a [Unity wrapper for the .NET RabbitMQ client](https://github.com/CymaticLabs/Unity3D.Amqp)
- * However, we are not using any of their sample scripts or actual wrapper methods because it is for an outdated version of Unity.
- *
- * - Instead, we have added just [their DLLs](https://github.com/CymaticLabs/Unity3D.Amqp/tree/master/unity/CymaticLabs.UnityAmqp/Assets/CymaticLabs/Amqp/Plugins) as plugins
- * as per https://learn.microsoft.com/en-us/visualstudio/gamedev/unity/unity-scripting-upgrade
- *
- * - Using the latest (6.0) .NET RabbitMQ client DLL directly:
- *		- requires also adding additional libs:
- *			- System.Runtime.CompilerServices.Unsafe
- *			- System.Threading.Channels
- *		- requires updating some method signatures
- *		- still seems to present the threading issues the old CymaticLabs wrapper tried to fix
- */

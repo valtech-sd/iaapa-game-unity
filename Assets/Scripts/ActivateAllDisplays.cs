@@ -11,8 +11,4 @@ public class ActivateAllDisplays : MonoBehaviour {
 			Display.displays[i].Activate();
 		}
 	}
-
-	void Update() {
-
-	}
 }

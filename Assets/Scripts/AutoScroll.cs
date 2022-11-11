@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class AutoScroll : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
-		startAutoScroll();
+		StartAutoScroll();
 	}
 
 	IEnumerator AutoScrollAnim(ScrollRect srollRect, float startPosition, float endPosition, float duration) {
@@ -20,7 +20,7 @@ public class AutoScroll : MonoBehaviour {
 
 	}
 
-	public void startAutoScroll() {
+	public void StartAutoScroll() {
 		StartCoroutine(AutoScrollAnim(GameObject.Find("Scroll View").GetComponent<ScrollRect>(), 1, 0, 100f));
 	}
 

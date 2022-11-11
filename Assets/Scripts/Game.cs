@@ -1,18 +1,12 @@
 using Doozy.Runtime.Nody;
-using Doozy.Runtime.UIManager.Components;
-using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using Doozy.Runtime.Reactor.Animators;
-using Doozy.Runtime.UIManager;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class Game : MonoBehaviour {
 	[Header("Message Broker")]
@@ -54,15 +48,7 @@ public class Game : MonoBehaviour {
 	[Header("Player Seats")]
 	[SerializeField] private GameObject[] playerSeats;
 
-	[Header("Game Run Active Turn")]
-	[SerializeField] private int _activeSlot = 0; //1-6 for player slots, 0 to clear
-	public int activeSlot {
-		get => _activeSlot;
-		private set {
-			_activeSlot = value;
-			Debug.Log("activeSlot has been set to " + value);
-		}
-	}
+	private int _activeSlot = 0; //1-6 for player slots, 0 to clear
 
 	private int _numberOfCountdownSlides = 5;
 
@@ -199,7 +185,7 @@ public class Game : MonoBehaviour {
 			needsUpdate = false;
 		}
 
-		if (_turnSwitched) {
+		if (turnSwitched) {
 			SwitchActivePlayer();
 			turnSwitched = false;
 		}
@@ -471,7 +457,7 @@ public class Game : MonoBehaviour {
 			string activePlayerId = currentTurnStartMessage.Data.PlayerId;
 			Debug.Log("activePlayerId: " + activePlayerId);
 			int activeIndex = currentGameStateMessage.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
-			activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
+			_activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
 
 			/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
 				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
