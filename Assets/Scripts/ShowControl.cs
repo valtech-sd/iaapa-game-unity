@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
+using TMPro;
 
 public class ShowControl : MonoBehaviour {
 	[SerializeField] private GameObject[] _winners;
@@ -24,6 +26,10 @@ public class ShowControl : MonoBehaviour {
 	private EventingBasicConsumer consumer;
 
 	private IModel channel;
+
+
+	// Reference to the Tournament class instance in the game
+	private Tournament _tournament;
 
 	private void Awake() {
 		try {
@@ -51,6 +57,31 @@ public class ShowControl : MonoBehaviour {
 		}
 	}
 
+	private void Start() {
+		_tournament = FindObjectOfType<Tournament>();
+
+		/*for (var i = 0; i < winners.Length; i++) {
+			var winner = winners[i];
+			foreach (Transform child in winner.transform) {
+				var inputField = child.gameObject.GetComponentInChildren<TMP_InputField>();
+				if (child.name == "Name") {
+					inputField.onValueChanged.AddListener(delegate {
+
+						var text = child.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+						Debug.Log($"Detected value change for winner{i} name to '{text}'");
+						_tournament.SetName(i, text);
+					});
+				}
+				else if (child.name == "Score") {
+					inputField.onValueChanged.AddListener(delegate {
+						var text = child.gameObject.GetComponentInChildren<TextMeshProUGUI>().text;
+						Debug.Log($"Detected value change for winner{i} score to '{text}'");
+						_tournament.SetScore(i, text);
+					});
+				}
+			}
+		}*/
+	}
 
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
 	public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, BasicDeliverEventHandler

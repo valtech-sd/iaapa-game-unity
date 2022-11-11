@@ -6157,7 +6157,6 @@ GameObject:
   - component: {fileID: 135741541}
   - component: {fileID: 135741543}
   - component: {fileID: 135741542}
-  - component: {fileID: 135741544}
   m_Layer: 0
   m_Name: Player1Points (3)
   m_TagString: Untagged
@@ -6282,20 +6281,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 135741540}
   m_CullTransparentMesh: 1
---- !u!114 &135741544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 135741540}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &136854161
 GameObject:
   m_ObjectHideFlags: 0
@@ -6479,7 +6464,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank6Name
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -6893,7 +6890,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank6Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -13346,7 +13355,6 @@ GameObject:
   - component: {fileID: 337816361}
   - component: {fileID: 337816360}
   - component: {fileID: 337816359}
-  - component: {fileID: 337816362}
   m_Layer: 0
   m_Name: Player1Name (3)
   m_TagString: Untagged
@@ -13484,20 +13492,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 337816357}
   m_CullTransparentMesh: 1
---- !u!114 &337816362
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 337816357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &344946891
 GameObject:
   m_ObjectHideFlags: 0
@@ -14160,7 +14154,6 @@ GameObject:
   - component: {fileID: 380715777}
   - component: {fileID: 380715779}
   - component: {fileID: 380715778}
-  - component: {fileID: 380715780}
   m_Layer: 0
   m_Name: Player1Points (3)
   m_TagString: Untagged
@@ -14285,20 +14278,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 380715776}
   m_CullTransparentMesh: 1
---- !u!114 &380715780
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 380715776}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &381967000
 GameObject:
   m_ObjectHideFlags: 0
@@ -14914,7 +14893,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank2Name
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -17941,7 +17932,6 @@ GameObject:
   - component: {fileID: 488473725}
   - component: {fileID: 488473727}
   - component: {fileID: 488473726}
-  - component: {fileID: 488473728}
   m_Layer: 0
   m_Name: Player1Points
   m_TagString: Untagged
@@ -18066,20 +18056,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 488473724}
   m_CullTransparentMesh: 1
---- !u!114 &488473728
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 488473724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &495973405
 GameObject:
   m_ObjectHideFlags: 0
@@ -22931,7 +22907,6 @@ GameObject:
   - component: {fileID: 736241453}
   - component: {fileID: 736241452}
   - component: {fileID: 736241451}
-  - component: {fileID: 736241454}
   m_Layer: 0
   m_Name: Player1Name (3)
   m_TagString: Untagged
@@ -23069,20 +23044,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 736241449}
   m_CullTransparentMesh: 1
---- !u!114 &736241454
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 736241449}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!224 &744134666 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
@@ -24444,7 +24405,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank2Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -32314,7 +32287,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank4Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -33450,7 +33435,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank5Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -35399,7 +35396,6 @@ GameObject:
   - component: {fileID: 1416441976}
   - component: {fileID: 1416441978}
   - component: {fileID: 1416441977}
-  - component: {fileID: 1416441979}
   m_Layer: 0
   m_Name: Player1Points (3)
   m_TagString: Untagged
@@ -35524,20 +35520,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1416441975}
   m_CullTransparentMesh: 1
---- !u!114 &1416441979
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1416441975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &1429497020
 GameObject:
   m_ObjectHideFlags: 0
@@ -35833,7 +35815,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank3Name
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -39257,7 +39251,6 @@ GameObject:
   - component: {fileID: 1501758292}
   - component: {fileID: 1501758294}
   - component: {fileID: 1501758293}
-  - component: {fileID: 1501758295}
   m_Layer: 0
   m_Name: Player1Points (2)
   m_TagString: Untagged
@@ -39382,20 +39375,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1501758291}
   m_CullTransparentMesh: 1
---- !u!114 &1501758295
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1501758291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &1501883825
 GameObject:
   m_ObjectHideFlags: 0
@@ -40244,7 +40223,6 @@ GameObject:
   - component: {fileID: 1556450608}
   - component: {fileID: 1556450607}
   - component: {fileID: 1556450606}
-  - component: {fileID: 1556450609}
   m_Layer: 0
   m_Name: Player1Name (1)
   m_TagString: Untagged
@@ -40382,20 +40360,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1556450604}
   m_CullTransparentMesh: 1
---- !u!114 &1556450609
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1556450604}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &1558212056
 GameObject:
   m_ObjectHideFlags: 0
@@ -40520,9 +40484,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1562052093}
   - component: {fileID: 1562052096}
-  - component: {fileID: 1562052095}
-  - component: {fileID: 1562052094}
   - component: {fileID: 1562052097}
+  - component: {fileID: 1562052094}
   m_Layer: 0
   m_Name: Player1Name
   m_TagString: Untagged
@@ -40562,8 +40525,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0c8f6df04846c5a6fb90ced8eb70b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Target: {fileID: 1562052095}
---- !u!114 &1562052095
+  Target: {fileID: 1562052097}
+--- !u!222 &1562052096
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1562052092}
+  m_CullTransparentMesh: 1
+--- !u!114 &1562052097
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40583,7 +40554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: PlayerName
+  m_text: Player Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7c3f9cfb4d16b96418d9095e925a7710, type: 2}
   m_sharedMaterial: {fileID: 7251992453575122397, guid: 7c3f9cfb4d16b96418d9095e925a7710, type: 2}
@@ -40610,12 +40581,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32
-  m_fontSizeBase: 32
+  m_fontSize: 39.45
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
-  m_fontSizeMin: 32
-  m_fontSizeMax: 32
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -40652,28 +40623,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1562052096
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1562052092}
-  m_CullTransparentMesh: 1
---- !u!114 &1562052097
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1562052092}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &1565629257
 GameObject:
   m_ObjectHideFlags: 0
@@ -45048,7 +44997,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank1Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -45572,13 +45533,13 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank1Name
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -47921,7 +47882,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank4Name
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -48102,7 +48075,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank5Name
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -48652,7 +48637,6 @@ GameObject:
   - component: {fileID: 1793038758}
   - component: {fileID: 1793038760}
   - component: {fileID: 1793038759}
-  - component: {fileID: 1793038761}
   m_Layer: 0
   m_Name: Player1Points (1)
   m_TagString: Untagged
@@ -48777,20 +48761,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1793038757}
   m_CullTransparentMesh: 1
---- !u!114 &1793038761
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1793038757}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &1797618791
 GameObject:
   m_ObjectHideFlags: 0
@@ -48803,7 +48773,6 @@ GameObject:
   - component: {fileID: 1797618795}
   - component: {fileID: 1797618794}
   - component: {fileID: 1797618793}
-  - component: {fileID: 1797618796}
   m_Layer: 0
   m_Name: Player1Name (2)
   m_TagString: Untagged
@@ -48941,20 +48910,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1797618791}
   m_CullTransparentMesh: 1
---- !u!114 &1797618796
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1797618791}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1001 &1807087779
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55688,7 +55643,19 @@ MonoBehaviour:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 122593285}
+        m_TargetAssemblyTypeName: Tournament, Assembly-CSharp
+        m_MethodName: set_rank3Score
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnTouchScreenKeyboardStatusChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -55757,7 +55724,6 @@ GameObject:
   - component: {fileID: 2093327613}
   - component: {fileID: 2093327612}
   - component: {fileID: 2093327611}
-  - component: {fileID: 2093327614}
   m_Layer: 0
   m_Name: Player1Name (3)
   m_TagString: Untagged
@@ -55895,20 +55861,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093327609}
   m_CullTransparentMesh: 1
---- !u!114 &2093327614
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2093327609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 530c60411eddabf4fa10dacf27077881, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  names: []
-  scores: []
 --- !u!1 &2094026602
 GameObject:
   m_ObjectHideFlags: 0
