@@ -327,13 +327,13 @@ public class Game : MonoBehaviour {
 
 
 			// Countdown to Game Start
-			var delayBeforeCountdownToStart = countdownToGameStartInSeconds - _numberOfCountdownSlides;
+			/*var delayBeforeCountdownToStart = countdownToGameStartInSeconds - _numberOfCountdownSlides;
 			if (delayBeforeCountdownToStart > 0) {
 				StartCoroutine(Utilities.ExecuteAfterTime(delayBeforeCountdownToStart, () => CountdownToGameStart()));
 			}
-			else {
+			else {*/
 				CountdownToGameStart();
-			}
+			//}
 
 
 
