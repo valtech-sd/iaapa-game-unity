@@ -28498,7 +28498,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 56}
+  m_SizeDelta: {x: 200, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &912478111
 MonoBehaviour:
@@ -51815,7 +51815,6 @@ MonoBehaviour:
   - {fileID: 1898618297}
   - {fileID: 1611659344}
   - {fileID: 305830428}
-  _activeSlot: 0
 --- !u!224 &2019167868 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2296413795653959912, guid: c098ecae9969a1443aa27ea916a9c8dd, type: 3}
