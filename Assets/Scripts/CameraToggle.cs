@@ -7,7 +7,8 @@ public class CameraToggle : MonoBehaviour {
 	public GameObject cam1;
 	public GameObject cam2;
 	public GameObject cam3;
-	public Material Game;
+    public GameObject showControlCanvas;
+    public Material Game;
 	public Material Leaderboard;
 	public Material ShowControl;
 	public Material WinnerScreen;
@@ -42,73 +43,95 @@ public class CameraToggle : MonoBehaviour {
 			Material[] newMaterials = new Material[]{Game};
 			renderTex = cam1.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey2Pressed) {
 			Material[] newMaterials = new Material[] { Leaderboard };
 			renderTex = cam1.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+
+        }
 
 		if (isKey3Pressed) {
 			Material[] newMaterials = new Material[] { ShowControl };
 			renderTex = cam1.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(true);
+            Canvas canvasVar;
+            canvasVar = showControlCanvas.GetComponent<Canvas>();
+            canvasVar.targetDisplay = 0;
+        }
 
 		if (isKey4Pressed) {
 			Material[] newMaterials = new Material[] { WinnerScreen };
 			renderTex = cam1.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey5Pressed) {
 			Material[] newMaterials = new Material[] { Game };
 			renderTex = cam2.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey6Pressed) {
 			Material[] newMaterials = new Material[] { Leaderboard };
 			renderTex = cam2.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey7Pressed) {
 			Material[] newMaterials = new Material[] { ShowControl };
 			renderTex = cam2.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(true);
+            Canvas canvasVar;
+            canvasVar = showControlCanvas.GetComponent<Canvas>();
+            canvasVar.targetDisplay = 1;
+        }
 
 		if (isKey8Pressed) {
 			Material[] newMaterials = new Material[] { WinnerScreen };
 			renderTex = cam2.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey9Pressed) {
 			Material[] newMaterials = new Material[] { Game };
 			renderTex = cam3.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey10Pressed) {
 			Material[] newMaterials = new Material[] { Leaderboard };
 			renderTex = cam3.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 		if (isKey11Pressed) {
 			Material[] newMaterials = new Material[] { ShowControl };
 			renderTex = cam3.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(true);
+            Canvas canvasVar;
+            canvasVar = showControlCanvas.GetComponent<Canvas>();
+            canvasVar.targetDisplay = 2;
+        }
 
 		if (isKey12Pressed) {
 			Material[] newMaterials = new Material[] { WinnerScreen };
 			renderTex = cam3.GetComponent<MeshRenderer>();
 			renderTex.materials = newMaterials;
-		}
+            showControlCanvas.SetActive(false);
+        }
 
 	}
 

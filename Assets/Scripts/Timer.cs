@@ -39,11 +39,13 @@ public class Timer : MonoBehaviour {
 		timeToDisplay += 1;
 		float minutes = Mathf.FloorToInt(timeToDisplay / 60);
 		float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-		//Debug.Log("minutes: " + minutes);
-		//Debug.Log("seconds: " + seconds);
+        //Debug.Log("minutes: " + minutes);
+        //Debug.Log("seconds: " + seconds);
 
-		_timerText.text = String.Format("{0:00}:{1:00}", minutes, seconds);
-	}
+        // need to add <mspace=72></mspace>
+        _timerText.text = "<mspace=72>" + String.Format("{ 0:00}:{1:00}", minutes, seconds) + "</mspace>";
+
+    }
 
 	public void StartTimer(float totalTime = k_DefaultTotalTimeInSeconds) {
 		Debug.Log("StartTimer: " + totalTime);
