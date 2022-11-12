@@ -1123,7 +1123,7 @@ GameObject:
   - component: {fileID: 22944691}
   - component: {fileID: 22944695}
   m_Layer: 0
-  m_Name: Canvas - Leaderboard - Display2
+  m_Name: Canvas - Leaderboard - Display B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51669,7 +51669,7 @@ GameObject:
   - component: {fileID: 2013313314}
   - component: {fileID: 2013313318}
   m_Layer: 0
-  m_Name: Canvas - Game - Display1
+  m_Name: Canvas - Game - Display A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
