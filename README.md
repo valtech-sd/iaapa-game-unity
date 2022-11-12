@@ -4,6 +4,7 @@ Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 
 ## Included In This Project
 1. TextMeshPro
 2. DoozyUI
+3. RabbitMQ ([See Note](#rabbitmq))
 
 ## Software Requirements
 1. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to use the repository.
@@ -22,9 +23,9 @@ Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 
 1. In your local copy of the project, go to Assets/StreamingAssets.
 2. Copy `config.template.json` onto `config.json` in the same directory.
 3. Edit the new `config.json` file to enter secret values we are not committing to version control:
-    - message broker / rabbit mq:
-      - user
-      - pass
+	- message broker / rabbit mq:
+	  - user
+	  - pass
 
 ## How To View the Game
 1. In Unity Hub > Projects, open the local repository for the project.
@@ -44,6 +45,27 @@ Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 
 3. `git add {file}` to stage files that should be committed.
 4. `git commit -m "{change info}"` to commit the files.
 5. `git push` to push changes to GitHub.
+
+## Notes
+### RabbitMQ
+This project currently uses .NET standard 2.1.  
+In case of upgrades, the setting is in Unity Editor > Edit > Project Settings > Player > Other Settings > Configuration.
+For more info: see [Scripting Runtime in Unity](https://learn.microsoft.com/en-us/visualstudio/gamedev/unity/unity-scripting-upgrade#enabling-the-net-4x-scripting-runtime-in-unity).
+
+CymaticLabs created a [Unity wrapper for the .NET RabbitMQ client](https://github.com/CymaticLabs/Unity3D.Amqp).
+However, we are not using any of their sample scripts or actual wrapper methods because it is for an outdated version of Unity.
+
+Instead, we have added just [their DLLs](https://github.com/CymaticLabs/Unity3D.Amqp/tree/master/unity/CymaticLabs.UnityAmqp/Assets/CymaticLabs/Amqp/Plugins) as plugins as per [Unity Scripting Upgrade](https://learn.microsoft.com/en-us/visualstudio/gamedev/unity/unity-scripting-upgrade).
+
+We are not using the latest (6.0) .NET RabbitMQ client DLL directly because it:
+
+- requires also adding additional libs:
+
+	- System.Runtime.CompilerServices.Unsafe
+	- System.Threading.Channels
+
+- requires updating some method signatures
+- still seems to present the threading issues the old CymaticLabs wrapper tried to fix
 
 ## Useful References
 - [How to set up a Unity project in GitHub](https://unityatscale.com/unity-version-control-guide/how-to-setup-unity-project-on-github/)
