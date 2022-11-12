@@ -31,7 +31,7 @@ public class Timer : MonoBehaviour {
 			}
 		}
 		else {
-			_timerText.text = "00:00";
+			_timerText.text = "<mspace=72>" + "00:00" + "</mspace>";
 		}
 	}
 	void DisplayTime(float timeToDisplay) {
@@ -42,7 +42,7 @@ public class Timer : MonoBehaviour {
         //Debug.Log("minutes: " + minutes);
         //Debug.Log("seconds: " + seconds);
 
-        // need to add <mspace=72></mspace>
+        // need to add <mspace=72></mspace> for character alignment
         _timerText.text = "<mspace=72>" + String.Format("{ 0:00}:{1:00}", minutes, seconds) + "</mspace>";
 
     }
