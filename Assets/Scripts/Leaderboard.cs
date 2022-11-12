@@ -98,8 +98,8 @@ public class Leaderboard : MonoBehaviour {
 			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
 
 			switch (currentPartyState) {
-				case "idle":
-					break;
+				/*case "idle":
+					break;*/
 				default:
 					SetPlayerCells();
 					break;
@@ -187,9 +187,9 @@ public class Leaderboard : MonoBehaviour {
 		// We are currently duplicating the events on the buttons here.
 		// If the events in the scene changes, it will also have to manually updated here!
 		switch (currentPartyState) {
-			case "idle":
-				//_flowControllerComponent.SetActiveNodeByName("Idle");
-				break;
+			/*case "idle":
+				_flowControllerComponent.SetActiveNodeByName("Idle");
+				break;*/
 			default:
 				_flowControllerComponent.SetActiveNodeByName("Leaderboard");
 				break;
