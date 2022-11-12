@@ -92,7 +92,7 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (needsUpdate || _game.needsUpdate) {
+		if (_showControl.isConnected && (needsUpdate || _game.needsUpdate)) {
 			//Debug.Log("previousPartyState: " + previousPartyState);
 			//Debug.Log("currentPartyState: " + currentPartyState);
 			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();

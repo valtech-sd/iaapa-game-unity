@@ -17,6 +17,15 @@ public class ShowControl : MonoBehaviour {
 		}
 	}
 
+	private bool _isConnected = false;
+	public bool isConnected {
+		get => _isConnected;
+		private set {
+			_isConnected = value;
+			Debug.Log("isConnected has been set to " + value);
+		}
+	}
+
 	private string _exchangeName;
 	private ConnectionFactory _factory;
 	private IConnection _connection;
@@ -43,16 +52,23 @@ public class ShowControl : MonoBehaviour {
 
 				// Make sure the message bus exchange we need exists
 				_channel.ExchangeDeclare(_exchangeName, "topic", false, false, null);
+
+				isConnected = true;
 			}
 		}
 		catch (Exception e) {
-			Debug.LogError(e);
+			Debug.LogError($"Message Broker is not connected: {e.Message}");
 		}
 	}
 
 	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
 	public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, BasicDeliverEventHandler
 	handler) {
+		if (!isConnected) {
+			Debug.LogError("Missing required message broker connection. Unable to register as consumer of {messageBusQueueName}.");
+			return;
+		}
+
 		// Make sure exchange is bound to queue
 		Debug.Log($"Binding '{messageBusQueueName}' queue to '{_exchangeName}' exchange with '{messageBusRoutingKey}' routing key.");
 		_channel.QueueBind(queue: messageBusQueueName,

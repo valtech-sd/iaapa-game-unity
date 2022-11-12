@@ -170,7 +170,7 @@ public class Game : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_needsUpdate) {
+		if (_showControl.isConnected && _needsUpdate) {
 			//Debug.Log("PreviousGameState: " + previousGameState);
 			//Debug.Log("CurrentGameState: " + currentGameState);
 			if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
