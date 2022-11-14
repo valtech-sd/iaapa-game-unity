@@ -153,29 +153,23 @@ public class Leaderboard : MonoBehaviour {
 	private void SetPlayerCell(LeaderboardEntry leaderboardEntry) {
 		_playerCellParent = (leaderboardEntry.Rank <= numberOfTopPlayers) ? playerCellParentTop : playerCellParentRemainder;
 
-		var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity, _playerCellParent.transform);
-
-		/*var rankObject = showControl.FindChildWithTag(newCell, "PlayerRank");
-		var nameObject = showControl.FindChildWithTag(newCell, "PlayerName");
-		var scoreObject = showControl.FindChildWithTag(newCell, "PlayerScore");
-		rankObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.Rank.ToString();
-		nameObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.PlayerName;
-		scoreObject.GetComponent<TextMeshProUGUI>().text = leaderboardEntry.Score.ToString();*/
+		// Instantiate new playerCell prefab instance.
+		// NOTE: With show control now in overlay mode while the rest are in camera, we need to make sure we are NOT instantiating in world space.
+		// Even with position (0,0,0), z will get changed to -10800.
+		//var newCell = Instantiate(playerCell, new Vector3 (0,0,0), Quaternion.identity,_playerCellParent.transform);
+		var newCell = Instantiate(playerCell, _playerCellParent.transform, false);
 
 		foreach (Transform child in newCell.transform) {
 			var textComponent = child.GetComponent<TextMeshProUGUI>();
 			if (child.name == "Rank") {
-				textComponent.text = leaderboardEntry.Rank.ToString();
+				textComponent.text = "#" + leaderboardEntry.Rank;
 			} else if (child.name == "Player Name") {
 				textComponent.text = leaderboardEntry.PlayerName;
 			} else if (child.name == "Score") {
 				textComponent.text = leaderboardEntry.Score.ToString();
 			}
 		}
-		Debug.Log($"Adding to {_playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
-
-		//newCell.transform.SetParent(playerCellParent.transform);
-
+		Debug.Log($"Added to {_playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
 	}
 
 	private void TriggerFlowControl() {
