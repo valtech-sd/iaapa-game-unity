@@ -269,7 +269,10 @@ public class Game : MonoBehaviour {
 
 		if (!_playerScoreTextElement.Equals(null)) {
 			_playerScoreTextElement.text = playerData.Score.ToString();
-			if (playerData.Score > 0) _playerPointsBg[index].SetActive(true);
+			//if (playerData.Score > 0) {
+			if (currentGameState == "run") {
+				_playerPointsBg[index].SetActive(true);
+			}
 		}
 
 		if (currentGameState == "run") {
@@ -295,8 +298,7 @@ public class Game : MonoBehaviour {
 			}
 		}
 	}
-
-	private void Countdown() {
+		private void Countdown() {
 		if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null
 			//&& currentGameStateMessage.Timestamp != default(long) &&
 			&& currentGameStateMessage.Data.GameStartTimestamp.HasValue
@@ -336,7 +338,7 @@ public class Game : MonoBehaviour {
 			Debug.LogError("Missing required data for game countdown in " + currentGameStateMessage);
 		}
 	}
-	private void CountdownToGameStart() {
+	 private void CountdownToGameStart() {
 		Debug.Log("Counting down to game start");
 		//_timer.StartTimer(countdownToGameStartInSeconds);
 		slides[0].SetActive(false);
