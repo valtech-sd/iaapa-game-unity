@@ -39,13 +39,13 @@ public class Leaderboard : MonoBehaviour {
 		set {
 			_currentLeaderboardMessage = value;
 			Debug.Log("currentLeaderboardMessage has been set to " + value);
-			needsUpdate = true;
+			needsUpdate++;
 		}
 	}
 
 	// Whether the text elements need updating due to a new game state message
-	private bool _needsUpdate = false;
-	private bool needsUpdate {
+	private int _needsUpdate = 0;
+	private int needsUpdate {
 		get => _needsUpdate;
 		set {
 			_needsUpdate = value;
@@ -91,7 +91,7 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_showControl.isConnected && (needsUpdate || _game.needsUpdate)) {
+		if (_showControl.isConnected && (needsUpdate > 0 || _game.needsUpdate > 0)) {
 			//Debug.Log("previousPartyState: " + previousPartyState);
 			//Debug.Log("currentPartyState: " + currentPartyState);
 			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
@@ -104,7 +104,7 @@ public class Leaderboard : MonoBehaviour {
 					break;
 			}
 
-			needsUpdate = false;
+			needsUpdate--;
 		}
 	}
 

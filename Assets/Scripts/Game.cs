@@ -85,13 +85,13 @@ public class Game : MonoBehaviour {
 			_currentGameStateMessage = value;
 			Debug.Log("currentGameStateMessage has been set to " + value);
 
-			needsUpdate = true;
+			needsUpdate++;
 		}
 	}
 
 	// Whether the text elements need updating due to a new game state message
-	private bool _needsUpdate = false;
-	public bool needsUpdate {
+	private int _needsUpdate = 0;
+	public int needsUpdate {
 		get => _needsUpdate;
 		private set {
 			_needsUpdate = value;
@@ -169,9 +169,9 @@ public class Game : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_showControl.isConnected && _needsUpdate) {
-			//Debug.Log("PreviousGameState: " + previousGameState);
-			//Debug.Log("CurrentGameState: " + currentGameState);
+		if (_showControl.isConnected && _needsUpdate > 0) {
+			Debug.Log("PreviousGameState: " + previousGameState);
+			Debug.Log("CurrentGameState: " + currentGameState);
 			if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
 
 			switch (currentGameState) {
@@ -182,7 +182,7 @@ public class Game : MonoBehaviour {
 					break;
 			}
 
-			needsUpdate = false;
+			needsUpdate--;
 		}
 
 		if (turnSwitched) {
@@ -469,7 +469,7 @@ public class Game : MonoBehaviour {
 				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
 			}*/
 
-			needsUpdate = true;
+			needsUpdate++;
 		}
 	}
 }
