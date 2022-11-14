@@ -61,24 +61,30 @@ public class ShowControl : MonoBehaviour {
 		}
 	}
 
-	//public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
-	public void RegisterConsumer(string messageBusQueueName, string messageBusRoutingKey, BasicDeliverEventHandler
+	//public void RegisterConsumer(string messageBrokerQueueName, string messageBrokerRoutingKey, EventHandler<BasicDeliverEventArgs> handler) {
+	public void RegisterConsumer(string messageBrokerQueueName, string messageBrokerRoutingKey, BasicDeliverEventHandler
 	handler) {
 		if (!isConnected) {
 			Debug.LogError("Missing required message broker connection. Unable to register as consumer of {messageBusQueueName}.");
 			return;
 		}
 
-		// Make sure exchange is bound to queue
-		Debug.Log($"Binding '{messageBusQueueName}' queue to '{_exchangeName}' exchange with '{messageBusRoutingKey}' routing key.");
-		_channel.QueueBind(queue: messageBusQueueName,
-			exchange: _exchangeName, routingKey: messageBusRoutingKey);
+		var randomNumberGenerator = new System.Random();
+		var randomizedQueueName = messageBrokerQueueName + "-" + randomNumberGenerator.Next();
 
-		Debug.Log($"Waiting for messages from '{messageBusQueueName}' queue.");
+		// Declare Queue
+		_channel.QueueDeclare(randomizedQueueName, false, false, true, null);
+
+		// Make sure exchange is bound to queue
+		Debug.Log($"Binding '{randomizedQueueName}' queue to '{_exchangeName}' exchange with '{messageBrokerRoutingKey}' routing key.");
+		_channel.QueueBind(queue: randomizedQueueName,
+			exchange: _exchangeName, routingKey: messageBrokerRoutingKey);
+
+		Debug.Log($"Waiting for messages from '{randomizedQueueName}' queue.");
 
 		_consumer = new EventingBasicConsumer(_channel);
 		_consumer.Received += handler;
-		_channel.BasicConsume(queue: messageBusQueueName,
+		_channel.BasicConsume(queue: randomizedQueueName,
 			//autoAck: true,
 			noAck: true,
 			consumer: _consumer);

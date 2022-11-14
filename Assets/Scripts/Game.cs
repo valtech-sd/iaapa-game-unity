@@ -9,11 +9,10 @@ using TMPro;
 using UnityEngine;
 
 public class Game : MonoBehaviour {
-	[Header("Message Broker")]
-	[SerializeField] private string gameStateQueueName = "qu.iaapa-unity-gamestate";
-	[SerializeField] private string gameStateRoutingKey = "#.gamestate";
-	[SerializeField] private string turnStartQueueName = "qu.iaapa-unity-turnstart";
-	[SerializeField] private string turnStartRoutingKey = "#.turnstart";
+	private string gameStateQueueName = "qu.iaapa-unity-gamestate";
+	private string gameStateRoutingKey = "#.gamestate";
+	private string turnStartQueueName = "qu.iaapa-unity-turnstart";
+	private string turnStartRoutingKey = "#.turnstart";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Flow Controller")]

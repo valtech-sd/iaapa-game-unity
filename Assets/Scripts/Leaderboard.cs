@@ -5,9 +5,8 @@ using TMPro;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour {
-	[Header("Message Broker")]
-	[SerializeField] private string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
-	[SerializeField] private string leaderboardRoutingKey = "#.leaderboard";
+	private string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
+	private string leaderboardRoutingKey = "#.leaderboard";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	// WE ARE USING FLOW CONTROLLER DIRECTLY INSTEAD OF ACCESSING THE BUTTON EVENTS DYNAMICALLY
