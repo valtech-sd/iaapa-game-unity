@@ -238,17 +238,19 @@ public class Game : MonoBehaviour {
 	private void SetPlayerDataForSeats() {
 		if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null  &&
 		currentGameStateMessage.Data.Locations is not null) {
-			List<Seat> seats = currentGameStateMessage.Data.Locations.OrderBy(s => s.Location).ToList();
-			for (var i=0; i<seats.Count; i++) {
-				Debug.Log($"Updating data for seat index {i}: {seats[i]}");
-				if (currentGameState == "end") {
-					List<Seat> winners = currentGameStateMessage.Data.Locations.OrderByDescending(s => s.Score).ToList();
-					var rankIndex = winners.FindIndex(w => w.Location == i + 1);
-					Debug.Log("Seat " + (i+1) + " has rank " + (rankIndex + 1));
-					SetPlayerDataForSeat(seats[i], i, rankIndex);
-				}
-				else {
-					SetPlayerDataForSeat(seats[i], i);
+			for (var i=0; i<playerSeats.Length; i++) {
+				Seat seat = currentGameStateMessage.Data.Locations.Find(l => l.Location == i + 1);
+				if (seat != default(Seat)) {
+					Debug.Log($"Updating data for seat index {i}: {seat}");
+					if (currentGameState == "end") {
+						List<Seat> winners = currentGameStateMessage.Data.Locations.OrderByDescending(s => s.Score).ToList();
+						var rankIndex = winners.FindIndex(w => w.Location == i + 1);
+						Debug.Log("Seat " + (i+1) + " has rank " + (rankIndex + 1));
+						SetPlayerDataForSeat(seat, i, rankIndex);
+					}
+					else {
+						SetPlayerDataForSeat(seat, i);
+					}
 				}
 			}
 		}
