@@ -43,7 +43,7 @@ public class Timer : MonoBehaviour {
         //Debug.Log("seconds: " + seconds);
 
         // need to add <mspace=72></mspace> for character alignment
-        _timerText.text = "<mspace=72>" + String.Format("{ 0:00}:{1:00}", minutes, seconds) + "</mspace>";
+        _timerText.text = "<mspace=72>" + String.Format("{0:00}:{1:00}", minutes, seconds) + "</mspace>";
 
     }
 
