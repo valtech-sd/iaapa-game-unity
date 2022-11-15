@@ -9,13 +9,7 @@ using UnityEngine;
 
 public class ShowControl : MonoBehaviour {
 	[SerializeField] private GameObject[] _winners;
-	public GameObject[] winners {
-		get => _winners;
-		private set {
-			_winners = value;
-			Debug.Log("winners has been set to " + value);
-		}
-	}
+	public GameObject[] winners => _winners;
 
 	private bool _isConnected = false;
 	public bool isConnected {

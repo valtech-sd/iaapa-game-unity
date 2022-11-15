@@ -3,13 +3,6 @@ using UnityEngine;
 using TMPro;
 public class Timer : MonoBehaviour {
 	private bool _showTimer = false;
-	public bool showTimer {
-		get => _showTimer;
-		set {
-			_showTimer = value;
-			Debug.Log("showTimer has been set to " + value);
-		}
-	}
 
 	private const float k_DefaultTotalTimeInSeconds = 60;
 	private float _timeRemaining = k_DefaultTotalTimeInSeconds;
@@ -20,7 +13,7 @@ public class Timer : MonoBehaviour {
 		_timerText = GetComponent<TextMeshProUGUI>();
 	}
 	void Update() {
-		if (showTimer) {
+		if (_showTimer) {
 			if (_timeRemaining > 0) {
 				_timeRemaining -= Time.deltaTime;
 				DisplayTime(_timeRemaining);
@@ -50,7 +43,7 @@ public class Timer : MonoBehaviour {
 	public void StartTimer(float totalTime = k_DefaultTotalTimeInSeconds) {
 		Debug.Log("StartTimer: " + totalTime);
 		_timeRemaining = totalTime;
-		showTimer = true;
+		_showTimer = true;
 	}
 
 }

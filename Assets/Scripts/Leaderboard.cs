@@ -7,8 +7,8 @@ using TMPro;
 using UnityEngine;
 
 public class Leaderboard : MonoBehaviour {
-	private string leaderboardQueueName = "qu.iaapa-unity-leaderboard";
-	private string leaderboardRoutingKey = "#.leaderboard";
+	readonly string _leaderboardQueueName = "qu.iaapa-unity-leaderboard";
+	readonly string _leaderboardRoutingKey = "#.leaderboard";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	// WE ARE USING FLOW CONTROLLER DIRECTLY INSTEAD OF ACCESSING THE BUTTON EVENTS DYNAMICALLY
@@ -45,37 +45,12 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	// List of received Leaderboard messages that need processing
-	private List<(UInt64,LeaderboardMessage)> _leaderboardMessages = new List<(ulong, LeaderboardMessage)>();
-	public List<(UInt64,LeaderboardMessage)> leaderboardMessages {
-		get => _leaderboardMessages;
-		private set {
-			_leaderboardMessages = value;
-			Debug.Log("leaderboardMessages has been set to " + value);
-		}
-	}
-
-
-	// Party state is NOT currently being sent from Rabbit MQ.
-	// Leverage game state.  If "idle", display idle screen.  Else, display the leaderboard.
-	private string currentPartyState {
-		get => _game.currentGameStateMessage is not null
-			? _game.currentGameStateMessage.Data.GameStatus
-			: "idle";
-	}
-	private string previousPartyState {
-		get => _game.previousGameState;
-	}
-
-	// To access the game state we need
-	// Reference to the Game class instance in the game
-	private Game _game;
+	readonly List<(UInt64,LeaderboardMessage)> _leaderboardMessages = new List<(ulong, LeaderboardMessage)>();
 
 	// Start is called before the first frame update
 	void Start() {
 		_showControl = FindObjectOfType<ShowControl>();
-		_showControl.RegisterConsumer(leaderboardQueueName, leaderboardRoutingKey, HandleLeaderboardMessage);
-
-		_game = FindObjectOfType<Game>();
+		_showControl.RegisterConsumer(_leaderboardQueueName, _leaderboardRoutingKey, HandleLeaderboardMessage);
 
 		// Set Flow Controller Component
 		_flowControllerComponent = flowController.GetComponent<FlowController>();
@@ -83,8 +58,6 @@ public class Leaderboard : MonoBehaviour {
 		// Destroy all existing player cells
 		DestroyCells(playerCellParentTop);
 		DestroyCells(playerCellParentRemainder);
-
-		//TriggerFlowControl(); "idle"
 	}
 
 	void OnDestroy() {
@@ -92,25 +65,15 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_showControl.isConnected && leaderboardMessages.Count > 0) {
-			currentLeaderboardMessage = leaderboardMessages[0].Item2;
+		if (_showControl.isConnected && _leaderboardMessages.Count > 0) {
+			currentLeaderboardMessage = _leaderboardMessages[0].Item2;
 
-			//Debug.Log("previousPartyState: " + previousPartyState);
-			//Debug.Log("currentPartyState: " + currentPartyState);
-			//if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
 			_flowControllerComponent.SetActiveNodeByName("Leaderboard");
 
-			/*switch (currentPartyState) {
-				case "idle":
-					break;
-				default:
-					SetPlayerCells();
-					break;
-			}*/
 			SetPlayerCells();
 
-			_showControl.channel.BasicAck(leaderboardMessages[0].Item1, false);
-			leaderboardMessages.RemoveAt(0);
+			_showControl.channel.BasicAck(_leaderboardMessages[0].Item1, false);
+			_leaderboardMessages.RemoveAt(0);
 		}
 	}
 
@@ -119,7 +82,7 @@ public class Leaderboard : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		leaderboardMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<LeaderboardMessage>(eventArgs)));
+		_leaderboardMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<LeaderboardMessage>(eventArgs)));
 	}
 
 	private void DestroyCells(GameObject parent) {
@@ -177,21 +140,4 @@ public class Leaderboard : MonoBehaviour {
 		Debug.Log($"Added to {_playerCellParent.name}: {leaderboardEntry.Rank.ToString()} {leaderboardEntry.PlayerName} {leaderboardEntry.Score.ToString()}");
 	}
 
-	private void TriggerFlowControl() {
-		Debug.Log($"Changing party state to {currentPartyState}");
-
-		// The UIButton component uses FlowController to animate navigation to another page.
-		// We want to leverage the flow already set up on the button component by invoking it.
-		// HOWEVER, DOOZY BUTTON EVENTS DO NOT SEEM TO WORK FROM SCRIPT AT ALL :-(
-		// We are currently duplicating the events on the buttons here.
-		// If the events in the scene changes, it will also have to manually updated here!
-		switch (currentPartyState) {
-			/*case "idle":
-				_flowControllerComponent.SetActiveNodeByName("Idle");
-				break;*/
-			default:
-				_flowControllerComponent.SetActiveNodeByName("Leaderboard");
-				break;
-		}
-	}
 }

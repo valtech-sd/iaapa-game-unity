@@ -9,10 +9,10 @@ using TMPro;
 using UnityEngine;
 
 public class Game : MonoBehaviour {
-	private string gameStateQueueName = "qu.iaapa-unity-gamestate";
-	private string gameStateRoutingKey = "#.gamestate";
-	private string turnStartQueueName = "qu.iaapa-unity-turnstart";
-	private string turnStartRoutingKey = "#.turnstart";
+	readonly string _gameStateQueueName = "qu.iaapa-unity-gamestate";
+	readonly string _gameStateRoutingKey = "#.gamestate";
+	readonly string _turnStartQueueName = "qu.iaapa-unity-turnstart";
+	readonly string _turnStartRoutingKey = "#.turnstart";
 
 	// We need this because we are not allowed to find objects outside of main thread from the RabbitMQ handler
 	[Header("Flow Controller")]
@@ -49,22 +49,22 @@ public class Game : MonoBehaviour {
 
 	private int _activeSlot = 0; //1-6 for player slots, 0 to clear
 
-	private int _numberOfCountdownSlides = 5;
+	readonly int _numberOfCountdownSlides = 5;
 
 	// List of objects we activate/deactivate
-	private List<GameObject> _playerColors = new List<GameObject>();
-	private List<GameObject> _playerColorOutlines = new List<GameObject>();
-	private List<GameObject> _playerPointsBg = new List<GameObject>();
-	private List<GameObject> _rank1 = new List<GameObject>();
-	private List<GameObject> _rank2 = new List<GameObject>();
-	private List<GameObject> _rank3 = new List<GameObject>();
+	readonly List<GameObject> _playerColors = new List<GameObject>();
+	readonly List<GameObject> _playerColorOutlines = new List<GameObject>();
+	readonly List<GameObject> _playerPointsBg = new List<GameObject>();
+	readonly List<GameObject> _rank1 = new List<GameObject>();
+	readonly List<GameObject> _rank2 = new List<GameObject>();
+	readonly List<GameObject> _rank3 = new List<GameObject>();
 
 	// List of color animators
-	private List<ColorAnimator> _playerColorAnimators = new List<ColorAnimator>();
+	readonly List<ColorAnimator> _playerColorAnimators = new List<ColorAnimator>();
 
 	// List of player texts we update
-	private List<TextMeshProUGUI> _playerNameTextComponents = new List<TextMeshProUGUI>();
-	private List<TextMeshProUGUI> _playerScoreTextComponents = new List<TextMeshProUGUI>();
+	readonly List<TextMeshProUGUI> _playerNameTextComponents = new List<TextMeshProUGUI>();
+	readonly List<TextMeshProUGUI> _playerScoreTextComponents = new List<TextMeshProUGUI>();
 
 	// The current player text element to update
 	private TextMeshProUGUI _playerNameTextElement;
@@ -74,22 +74,15 @@ public class Game : MonoBehaviour {
 	private ShowControl _showControl;
 
 	// List of received GameStateMessage messages that need processing
-	private List<(UInt64,GameStateMessage)> _gameStateMessages = new List<(ulong, GameStateMessage)>();
-	public List<(UInt64,GameStateMessage)> gameStateMessages {
-		get => _gameStateMessages;
-		private set {
-			_gameStateMessages = value;
-			Debug.Log("gameStateMessages has been set to " + value);
-		}
-	}
+	readonly List<(UInt64,GameStateMessage)> _gameStateMessages = new List<(ulong, GameStateMessage)>();
 
 	// The latest game state message from Rabbit MQ
 	private GameStateMessage _currentGameStateMessage;
-	public GameStateMessage currentGameStateMessage {
+	private GameStateMessage currentGameStateMessage {
 		get => _currentGameStateMessage;
-		private set {
-			if (_currentGameStateMessage is not null && _currentGameStateMessage.Data is not null) {
-				previousGameState = _currentGameStateMessage.Data.GameStatus;
+		set {
+			if (currentGameStateMessage is not null && currentGameStateMessage.Data is not null) {
+				_previousGameState = currentGameStateMessage.Data.GameStatus;
 			}
 
 			_currentGameStateMessage = value;
@@ -97,40 +90,17 @@ public class Game : MonoBehaviour {
 		}
 	}
 
-	public string currentGameState {
-		get => (currentGameStateMessage is not null && currentGameStateMessage.Data is not null)
+	private string currentGameState  => (currentGameStateMessage is not null && currentGameStateMessage.Data is not null)
 			? currentGameStateMessage.Data.GameStatus
 			: "idle";
-	}
 
 	private string _previousGameState;
-	public string previousGameState {
-		get => _previousGameState;
-		private set {
-			_previousGameState = value;
-			Debug.Log("previousGameState has been set to " + value);
-		}
-	}
 
 	// List of received TurnStartMessage messages that need processing
-	private List<(UInt64,TurnStartMessage)> _turnStartMessages = new List<(ulong, TurnStartMessage)>();
-	public List<(UInt64,TurnStartMessage)> turnStartMessages {
-		get => _turnStartMessages;
-		private set {
-			_turnStartMessages = value;
-			Debug.Log("turnStartMessages has been set to " + value);
-		}
-	}
+	readonly List<(UInt64,TurnStartMessage)> _turnStartMessages = new List<(ulong, TurnStartMessage)>();
 
 	// The latest turn start message from Rabbit MQ
 	private TurnStartMessage _currentTurnStartMessage;
-	public TurnStartMessage currentTurnStartMessage {
-		get => _currentTurnStartMessage;
-		private set {
-			_currentTurnStartMessage = value;
-			Debug.Log("currentTurnStartData has been set to " + value);
-		}
-	}
 
 	// Reference to Timer class instance in the game
 	private Timer _timer;
@@ -138,8 +108,8 @@ public class Game : MonoBehaviour {
 	// Start is called before the first frame update
 	void Start() {
 		_showControl = FindObjectOfType<ShowControl>();
-		_showControl.RegisterConsumer(gameStateQueueName, gameStateRoutingKey, HandleGameStateMessage);
-		_showControl.RegisterConsumer(turnStartQueueName, turnStartRoutingKey, HandleTurnStartMessage);
+		_showControl.RegisterConsumer(_gameStateQueueName, _gameStateRoutingKey, HandleGameStateMessage);
+		_showControl.RegisterConsumer(_turnStartQueueName, _turnStartRoutingKey, HandleTurnStartMessage);
 
 		// We need to find and set components here because will get "can only be run in main thread" error from RabbitMQ handler
 
@@ -158,8 +128,6 @@ public class Game : MonoBehaviour {
 
 		// Set Flow Controller Component
 		_flowControllerComponent = flowController.GetComponent<FlowController>();
-
-		//TriggerFlowControl(); //idle
 	}
 	void OnDestroy() {
 		//showControl.UnRegisterConsumer(HandleGameStateMessage);
@@ -169,11 +137,11 @@ public class Game : MonoBehaviour {
 		if (_showControl.isConnected) {
 			// Process game state messages from Unity main thread
 			if (_gameStateMessages.Count > 0) {
-				currentGameStateMessage = gameStateMessages[0].Item2;
+				currentGameStateMessage = _gameStateMessages[0].Item2;
 
-				Debug.Log("PreviousGameState: " + previousGameState);
+				Debug.Log("PreviousGameState: " + _previousGameState);
 				Debug.Log("CurrentGameState: " + currentGameState);
-				if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
+				if (_previousGameState != currentGameState || _previousGameState is null) TriggerFlowControl();
 
 				switch (currentGameState) {
 					case "idle":
@@ -183,18 +151,18 @@ public class Game : MonoBehaviour {
 						break;
 				}
 
-				_showControl.channel.BasicAck(gameStateMessages[0].Item1, false);
-				gameStateMessages.RemoveAt(0);
+				_showControl.channel.BasicAck(_gameStateMessages[0].Item1, false);
+				_gameStateMessages.RemoveAt(0);
 			}
 
 			// Process turn start messages from Unity main thread
 			if (_turnStartMessages.Count > 0) {
-				currentTurnStartMessage = turnStartMessages[0].Item2;
+				_currentTurnStartMessage = _turnStartMessages[0].Item2;
 				SwitchActivePlayer();
 				SetPlayerDataForSeats();
 
-				_showControl.channel.BasicAck(turnStartMessages[0].Item1, false);
-				turnStartMessages.RemoveAt(0);
+				_showControl.channel.BasicAck(_turnStartMessages[0].Item1, false);
+				_turnStartMessages.RemoveAt(0);
 			}
 		}
 
@@ -204,7 +172,7 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		gameStateMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<GameStateMessage>(eventArgs)));
+		_gameStateMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<GameStateMessage>(eventArgs)));
 	}
 
 
@@ -212,7 +180,7 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		turnStartMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<TurnStartMessage>(eventArgs)));
+		_turnStartMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<TurnStartMessage>(eventArgs)));
 	}
 
 	private void ResetSeats() {
@@ -386,7 +354,7 @@ public class Game : MonoBehaviour {
 
 	private void SetComponents() {
 		Debug.Log("Setting components for all " + playerSeats.Length + " seats");
-		for(var i=0; i < playerSeats.Length; i++) {
+		for (var i=0; i < playerSeats.Length; i++) {
 			var seatObj = playerSeats[i];
 			//Debug.Log("Seat " + i + " has " + seatObj.transform.childCount + "children") ;
 			foreach (Transform child in seatObj.transform) {
@@ -465,11 +433,11 @@ public class Game : MonoBehaviour {
 	}
 
 	private void SwitchActivePlayer() {
-		if (currentTurnStartMessage is not null && currentTurnStartMessage.Data is not null &&
+		if (_currentTurnStartMessage is not null && _currentTurnStartMessage.Data is not null &&
 			currentGameStateMessage is not null && currentGameStateMessage.Data is not null && currentGameStateMessage.Data
 			.Locations is not null) {
 
-			string activePlayerId = currentTurnStartMessage.Data.PlayerId;
+			string activePlayerId = _currentTurnStartMessage.Data.PlayerId;
 			Debug.Log("activePlayerId: " + activePlayerId);
 			int activeIndex = currentGameStateMessage.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
 			_activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
