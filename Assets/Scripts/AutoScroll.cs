@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class AutoScroll : MonoBehaviour {
+
+    public GameObject playerCellContainer;
+
 	// Start is called before the first frame update
 	void Start() {
 		StartAutoScroll();
@@ -13,8 +16,9 @@ public class AutoScroll : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 		float t0 = 0.0f;
 		while (t0 < 1.0f) {
-			t0 += Time.deltaTime / duration;
-			srollRect.verticalNormalizedPosition = Mathf.Lerp(startPosition, endPosition, t0);
+            duration = playerCellContainer.transform.childCount;
+            t0 += Time.deltaTime / duration;
+            srollRect.verticalNormalizedPosition = Mathf.Lerp(startPosition, endPosition, t0);
 			yield return null;
 		}
 
@@ -29,6 +33,7 @@ public class AutoScroll : MonoBehaviour {
         float t0 = 0.0f;
         while (t0 < 1.0f)
         {
+            duration = playerCellContainer.transform.childCount;
             t0 += Time.deltaTime / duration;
             srollRect.verticalNormalizedPosition = Mathf.Lerp(startPosition, endPosition, t0);
             yield return null;
