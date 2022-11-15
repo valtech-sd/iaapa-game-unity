@@ -32,6 +32,13 @@ public class ShowControl : MonoBehaviour {
 	private EventingBasicConsumer _consumer;
 
 	private IModel _channel;
+	public IModel channel {
+		get => _channel;
+		private set  {
+			_channel = value;
+			Debug.Log("channel has been set to " + value);
+		}
+	}
 
 	private void Awake() {
 		try {
@@ -46,12 +53,16 @@ public class ShowControl : MonoBehaviour {
 				_exchangeName = config.MessageBroker.Exchange;
 
 				// Connect to message broker
-				_factory = new ConnectionFactory() { HostName = config.MessageBroker.Host, UserName = config.MessageBroker.User, Password = config.MessageBroker.Pass};
+				_factory = new ConnectionFactory() {
+					HostName = config.MessageBroker.Host,
+					UserName = config.MessageBroker.User,
+					Password = config.MessageBroker.Pass,
+				};
 				_connection = _factory.CreateConnection();
-				_channel = _connection.CreateModel();
+				channel = _connection.CreateModel();
 
 				// Make sure the message bus exchange we need exists
-				_channel.ExchangeDeclare(_exchangeName, "topic", false, false, null);
+				channel.ExchangeDeclare(_exchangeName, "topic", false, false, null);
 
 				isConnected = true;
 			}
@@ -69,24 +80,29 @@ public class ShowControl : MonoBehaviour {
 			return;
 		}
 
+		// Only queue up 1 message at a time until an ack is sent
+		channel.BasicQos(0, 1,false);
+
 		var randomNumberGenerator = new System.Random();
 		var randomizedQueueName = messageBrokerQueueName + "-" + randomNumberGenerator.Next();
 
 		// Declare Queue
-		_channel.QueueDeclare(randomizedQueueName, false, false, true, null);
+		channel.QueueDeclare(randomizedQueueName, false, false, true, null);
 
 		// Make sure exchange is bound to queue
 		Debug.Log($"Binding '{randomizedQueueName}' queue to '{_exchangeName}' exchange with '{messageBrokerRoutingKey}' routing key.");
-		_channel.QueueBind(queue: randomizedQueueName,
+		channel.QueueBind(queue: randomizedQueueName,
 			exchange: _exchangeName, routingKey: messageBrokerRoutingKey);
 
 		Debug.Log($"Waiting for messages from '{randomizedQueueName}' queue.");
 
 		_consumer = new EventingBasicConsumer(_channel);
 		_consumer.Received += handler;
-		_channel.BasicConsume(queue: randomizedQueueName,
-			//autoAck: true,
-			noAck: true,
+
+		// Consume messages without auto ack
+		channel.BasicConsume(queue: randomizedQueueName,
+			//autoAck: false,
+			noAck: false,
 			consumer: _consumer);
 	}
 

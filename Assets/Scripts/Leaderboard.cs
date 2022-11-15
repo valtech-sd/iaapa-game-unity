@@ -1,6 +1,8 @@
 using Doozy.Runtime.Nody;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -24,7 +26,7 @@ public class Leaderboard : MonoBehaviour {
 
 	private GameObject _playerCellParent;
 
-	// Number for always-On e
+	// Number of players always displayed on leaderboard
 	[Header("Top Players To Always Display")]
 	[SerializeField] int numberOfTopPlayers = 12;
 
@@ -39,17 +41,16 @@ public class Leaderboard : MonoBehaviour {
 		set {
 			_currentLeaderboardMessage = value;
 			Debug.Log("currentLeaderboardMessage has been set to " + value);
-			needsUpdate++;
 		}
 	}
 
-	// Whether the text elements need updating due to a new game state message
-	private int _needsUpdate = 0;
-	private int needsUpdate {
-		get => _needsUpdate;
-		set {
-			_needsUpdate = value;
-			Debug.Log("Leaderboard.needsUpdate has been set to " + value);
+	// List of received Leaderboard messages that need processing
+	private List<(UInt64,LeaderboardMessage)> _leaderboardMessages = new List<(ulong, LeaderboardMessage)>();
+	public List<(UInt64,LeaderboardMessage)> leaderboardMessages {
+		get => _leaderboardMessages;
+		private set {
+			_leaderboardMessages = value;
+			Debug.Log("leaderboardMessages has been set to " + value);
 		}
 	}
 
@@ -91,20 +92,25 @@ public class Leaderboard : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_showControl.isConnected && (needsUpdate > 0 || _game.needsUpdate > 0)) {
+		if (_showControl.isConnected && leaderboardMessages.Count > 0) {
+			currentLeaderboardMessage = leaderboardMessages[0].Item2;
+
 			//Debug.Log("previousPartyState: " + previousPartyState);
 			//Debug.Log("currentPartyState: " + currentPartyState);
-			if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
+			//if (currentPartyState != previousPartyState  || previousPartyState is null) TriggerFlowControl();
+			_flowControllerComponent.SetActiveNodeByName("Leaderboard");
 
-			switch (currentPartyState) {
-				/*case "idle":
-					break;*/
+			/*switch (currentPartyState) {
+				case "idle":
+					break;
 				default:
 					SetPlayerCells();
 					break;
-			}
+			}*/
+			SetPlayerCells();
 
-			needsUpdate--;
+			_showControl.channel.BasicAck(leaderboardMessages[0].Item1, false);
+			leaderboardMessages.RemoveAt(0);
 		}
 	}
 
@@ -113,7 +119,7 @@ public class Leaderboard : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		currentLeaderboardMessage = _showControl.GetMessageData<LeaderboardMessage>(eventArgs);
+		leaderboardMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<LeaderboardMessage>(eventArgs)));
 	}
 
 	private void DestroyCells(GameObject parent) {

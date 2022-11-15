@@ -73,6 +73,16 @@ public class Game : MonoBehaviour {
 	// Reference to the ShowControl class instance in the game
 	private ShowControl _showControl;
 
+	// List of received GameStateMessage messages that need processing
+	private List<(UInt64,GameStateMessage)> _gameStateMessages = new List<(ulong, GameStateMessage)>();
+	public List<(UInt64,GameStateMessage)> gameStateMessages {
+		get => _gameStateMessages;
+		private set {
+			_gameStateMessages = value;
+			Debug.Log("gameStateMessages has been set to " + value);
+		}
+	}
+
 	// The latest game state message from Rabbit MQ
 	private GameStateMessage _currentGameStateMessage;
 	public GameStateMessage currentGameStateMessage {
@@ -84,18 +94,6 @@ public class Game : MonoBehaviour {
 
 			_currentGameStateMessage = value;
 			Debug.Log("currentGameStateMessage has been set to " + value);
-
-			needsUpdate++;
-		}
-	}
-
-	// Whether the text elements need updating due to a new game state message
-	private int _needsUpdate = 0;
-	public int needsUpdate {
-		get => _needsUpdate;
-		private set {
-			_needsUpdate = value;
-			Debug.Log("Game.needsUpdate has been set to " + value);
 		}
 	}
 
@@ -114,6 +112,16 @@ public class Game : MonoBehaviour {
 		}
 	}
 
+	// List of received TurnStartMessage messages that need processing
+	private List<(UInt64,TurnStartMessage)> _turnStartMessages = new List<(ulong, TurnStartMessage)>();
+	public List<(UInt64,TurnStartMessage)> turnStartMessages {
+		get => _turnStartMessages;
+		private set {
+			_turnStartMessages = value;
+			Debug.Log("turnStartMessages has been set to " + value);
+		}
+	}
+
 	// The latest turn start message from Rabbit MQ
 	private TurnStartMessage _currentTurnStartMessage;
 	public TurnStartMessage currentTurnStartMessage {
@@ -121,17 +129,6 @@ public class Game : MonoBehaviour {
 		private set {
 			_currentTurnStartMessage = value;
 			Debug.Log("currentTurnStartData has been set to " + value);
-			_turnSwitched = true;
-		}
-	}
-
-	// Whether the player whose turn it is has switched
-	private bool _turnSwitched = false;
-	private bool turnSwitched {
-		get => _turnSwitched;
-		set {
-			_turnSwitched = value;
-			Debug.Log("turnSwitched has been set to " + value);
 		}
 	}
 
@@ -169,33 +166,45 @@ public class Game : MonoBehaviour {
 	}
 
 	void Update() {
-		if (_showControl.isConnected && _needsUpdate > 0) {
-			Debug.Log("PreviousGameState: " + previousGameState);
-			Debug.Log("CurrentGameState: " + currentGameState);
-			if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
+		if (_showControl.isConnected) {
+			// Process game state messages from Unity main thread
+			if (_gameStateMessages.Count > 0) {
+				currentGameStateMessage = gameStateMessages[0].Item2;
 
-			switch (currentGameState) {
-				case "idle":
-					break;
-				default:
-					SetPlayerDataForSeats();
-					break;
+				Debug.Log("PreviousGameState: " + previousGameState);
+				Debug.Log("CurrentGameState: " + currentGameState);
+				if (previousGameState != currentGameState || previousGameState is null) TriggerFlowControl();
+
+				switch (currentGameState) {
+					case "idle":
+						break;
+					default:
+						SetPlayerDataForSeats();
+						break;
+				}
+
+				_showControl.channel.BasicAck(gameStateMessages[0].Item1, false);
+				gameStateMessages.RemoveAt(0);
 			}
 
-			needsUpdate--;
+			// Process turn start messages from Unity main thread
+			if (_turnStartMessages.Count > 0) {
+				currentTurnStartMessage = turnStartMessages[0].Item2;
+				SwitchActivePlayer();
+				SetPlayerDataForSeats();
+
+				_showControl.channel.BasicAck(turnStartMessages[0].Item1, false);
+				turnStartMessages.RemoveAt(0);
+			}
 		}
 
-		if (turnSwitched) {
-			SwitchActivePlayer();
-			turnSwitched = false;
-		}
 	}
 	//void HandleGameStateMessage(object obj, BasicDeliverEventArgs eventArgs) {
 	void HandleGameStateMessage(IBasicConsumer obj, BasicDeliverEventArgs eventArgs) {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		currentGameStateMessage = _showControl.GetMessageData<GameStateMessage>(eventArgs);
+		gameStateMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<GameStateMessage>(eventArgs)));
 	}
 
 
@@ -203,7 +212,7 @@ public class Game : MonoBehaviour {
 		// NOTE: Unity is single-threaded and does not allow direct game object updates from delegates.
 		// Update a variable we can read from the main thread instead.
 		// https://answers.unity.com/questions/1327573/how-do-i-resolve-get-isactiveandenabled-can-only-b.html
-		currentTurnStartMessage = _showControl.GetMessageData<TurnStartMessage>(eventArgs);
+		turnStartMessages.Add((eventArgs.DeliveryTag, _showControl.GetMessageData<TurnStartMessage>(eventArgs)));
 	}
 
 	private void ResetSeats() {
@@ -468,8 +477,6 @@ public class Game : MonoBehaviour {
 			/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
 				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
 			}*/
-
-			needsUpdate++;
 		}
 	}
 }
