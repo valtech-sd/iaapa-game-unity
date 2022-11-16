@@ -256,18 +256,7 @@ public class Game : MonoBehaviour {
 			}
 		}
 
-		if (currentGameState == "run") {
-			if (playerData.Location == _activeSlot || !timerContainer.activeSelf) {
-				ActivateSeat(index);
-			}
-			else {
-				DeactivateSeat(index);
-			}
-		}
-
 		if (currentGameState == "end") {
-			ActivateSeat(index);
-
 			if (rankIndex == 0) {
 				_rank1[index].SetActive(true);
 			}
@@ -286,6 +275,8 @@ public class Game : MonoBehaviour {
 			// && currentGameStateMessage.Data.GameEndTimestamp.HasValue
 			&& currentGameStateMessage.Data.GameLength.HasValue
 		) {
+			ActivateAllSeats();
+
 			var nowInMs = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
 			var countdownToGameStartInSeconds =
@@ -337,12 +328,12 @@ public class Game : MonoBehaviour {
 			_playerPointsBg[i].SetActive(true);
 		}*/
 	}
-	/*private void ActivateAllSeats() {
+	private void ActivateAllSeats() {
 		Debug.Log($"playerSeats.Length: {playerSeats.Length}");
 		for (var i = 0; i < playerSeats.Length; i++) {
 			if (playerSeats[i].activeSelf) ActivateSeat(i);
 		}
-	}*/
+	}
 	private void ActivateSeat(int index) {
 		Debug.Log($"Activating seat {index}");
 		_playerColors[index].SetActive(true);
@@ -428,7 +419,7 @@ public class Game : MonoBehaviour {
 				break;
 			case "end":
 				timerContainer.SetActive(false);
-				//ActivateAllSeats();
+				ActivateAllSeats();
 				//endButtonComponent.onClickEvent.Invoke();
 				_flowControllerComponent.SetActiveNodeByName("Game");
 				break;
@@ -445,9 +436,14 @@ public class Game : MonoBehaviour {
 			int activeIndex = currentGameStateMessage.Data.Locations.FindIndex(i => i.PlayerId == activePlayerId);
 			_activeSlot = currentGameStateMessage.Data.Locations[activeIndex].Location;
 
-			/*for (var i=0; i < runPlayerHasCurrentTurns.Length; i++) {
-				runPlayerHasCurrentTurns[i] = (i == activeSlot - 1);
-			}*/
+			for (var i=0; i < playerSeats.Length; i++) {
+				if (i == _activeSlot - 1) {
+					ActivateSeat(i);
+				}
+				else {
+					DeactivateSeat(i);
+				}
+			}
 		}
 	}
 }
