@@ -231,8 +231,17 @@ public class Game : MonoBehaviour {
 						SetPlayerDataForSeat(seat, i);
 					}
 				}
+				else {
+					ClearPlayerDataForSeat(i);
+				}
 			}
 		}
+	}
+
+
+	private void ClearPlayerDataForSeat(int index) {
+		playerSeats[index].SetActive(false);
+		_playerColorOutlines[index].SetActive(false);
 	}
 
 	private void SetPlayerDataForSeat(Seat playerData, int index, int rankIndex=-1) {
