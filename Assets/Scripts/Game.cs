@@ -49,7 +49,10 @@ public class Game : MonoBehaviour {
 
 	private int _activeSlot = 0; //1-6 for player slots, 0 to clear
 
-	readonly int _numberOfCountdownSlides = 5;
+	// Number of slides counting down to game start (1 second per slide)
+	// Use 5 to include the "Go!" slide
+	// Use 4 to exclude the "Go!" slide
+	readonly int _numberOfCountdownSlides = 4;
 
 	// List of objects we activate/deactivate
 	readonly List<GameObject> _playerColors = new List<GameObject>();
