@@ -1,5 +1,5 @@
-# uni-iaapa
-Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 2022 
+# iaapa-game-unity
+Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-Party
 
 ## Included In This Project
 1. TextMeshPro
@@ -12,39 +12,56 @@ Unity project repository for the (BEAT THE BUZZ) mini games for the IAAPA event 
 3. [Unity Hub](https://unity3d.com/get-unity/download) to manage Unity versions and projects and to install the Unity editor.
 4. [a script editor](https://www.dunebook.com/best-unity-ide/) to edit scripts.
 
-## How To Pull the Project
+## How To Get
+### Clone (To Edit and Run)
 1. Download all needed tools from listed software requirements above.
 2. [Clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) from GitHub.
 3. If previously cloned and just need to get code updates, then `git pull`.  
 4. Make sure to use LFS to pull all files: `git lfs pull`.  Otherwise, you may get errors from missing expected files.
 5. In Unity Hub > Installs, install the Unity Editor for the LTS version used by the repository currently, 2021.3.11f1.
+### Build (To Only Run)
+1. TBD -- Builds are currently not published / saved to Git.
 
-## How To Finish Setting Up the Project
-1. In your local copy of the project, go to Assets/StreamingAssets.
+## How To Finish Setting Up (For BOTH Clone OR Build)
+This unity needs to subscribe to message broker queues in the [IAAPA Game Rules Engine] for game info. 
+1. In your local copy or build of the project, go to Assets/StreamingAssets.
 2. Copy `config.template.json` onto `config.json` in the same directory.
 3. Edit the new `config.json` file to enter secret values we are not committing to version control:
 	- message broker / rabbit mq:
 	  - user
 	  - pass
 
-## How To View the Game
+## How To Run
+### From Clone
 1. In Unity Hub > Projects, open the local repository for the project.
 2. This should open the Unity Editor scene view by default.
 3. In Unity Editor > bottom section > Project tab > Scenes folder, click on "Main" to open the main scene.
 4. In Unity Editor > top middle section, click on Play button to start the scene. NOTE: You will get ERRORS if you did not finish setting up the config file above.
 5. Click on the same button to end the scene.
+### From Build
+1. Click on the build executable.
 
-## How To Make Changes to the Project
-1. In Unity Hub > Projects, open the local repository for the project.
+## How To Edit
+1. In Unity Hub > Projects, open the local [clone](#clone-to-edit-and-run) of the project.
 2. Edit the scenes and components via the Unity Editor.
 3. Edit the scripts via your script editor.
 
-## How To Push Changes to the Project
-1. `git status` to check file changed.
-2. `git restore {file}` to unstage files that should not be committed.
-3. `git add {file}` to stage files that should be committed.
-4. `git commit -m "{change info}"` to commit the files.
-5. `git push` to push changes to GitHub.
+## How To Upload Changes
+1. In Terminal, go to the [clone](#clone-to-edit-and-run) directory of the project.
+2. `git status` to check file changed.
+3. `git restore {file}` to unstage files that should not be committed.
+4. `git add {file}` to stage files that should be committed.
+5. `git commit -m "{change info}"` to commit the files.
+6. `git push` to push changes to GitHub.
+
+## How To Build 
+1. In Unity Editor, go to File > Build Settings...
+2. Select "Windows, Mac, Linux" as Platform.
+3. Select desired "Target Platform" from dropdown.
+4. Select desired platform "Architecture" from dropdown.
+5. Click "Build" button.
+6. Save build file to the "Builds" subdirectory of the project.
+
 
 ## Notes
 ### RabbitMQ
