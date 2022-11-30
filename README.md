@@ -12,6 +12,9 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 3. [Unity Hub](https://unity3d.com/get-unity/download) to manage Unity versions and projects and to install the Unity editor.
 4. [a script editor](https://www.dunebook.com/best-unity-ide/) to edit scripts.
 
+## Additional Reqquirements
+1. [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine)
+
 ## How To Get
 ### Clone (To Edit and Run)
 1. Download all needed tools from listed software requirements above.
@@ -23,7 +26,7 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 1. TBD -- Builds are currently not published / saved to Git.
 
 ## How To Finish Setting Up (For BOTH Clone OR Build)
-This unity needs to subscribe to message broker queues in the [IAAPA Game Rules Engine] for game info. 
+This unity needs to subscribe to message broker queues in the [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine) for game info. 
 1. In your local copy or build of the project, go to Assets/StreamingAssets.
 2. Copy `config.template.json` onto `config.json` in the same directory.
 3. Edit the new `config.json` file to enter secret values we are not committing to version control:
@@ -40,6 +43,12 @@ This unity needs to subscribe to message broker queues in the [IAAPA Game Rules 
 5. Click on the same button to end the scene.
 ### From Build
 1. Click on the build executable.
+
+## How To Test with Simulator
+Running this app does not do much without receiving messages published to the message broker.  To receive a message sequence, run the simulator.
+1. Go to local directory for [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine).
+2. `cd simulator`
+3. `yarn sim:showcontrol`
 
 ## How To Edit
 1. In Unity Hub > Projects, open the local [clone](#clone-to-edit-and-run) of the project.
