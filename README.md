@@ -10,6 +10,7 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 1. [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) to use the repository.
 2. [Git LFS](https://git-lfs.github.com/) to access the large asset files in the repository.
 3. [Unity Hub](https://unity3d.com/get-unity/download) to manage Unity versions and projects and to install the Unity editor.
+   > ℹ️️️**INFO:** This project is using editor version 2021.3.11.f1
 4. [a script editor](https://www.dunebook.com/best-unity-ide/) to edit scripts.
 
 ## Additional Requirements
