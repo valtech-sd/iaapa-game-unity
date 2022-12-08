@@ -1,4 +1,4 @@
-name: Build
+name: Build for Standalone Windows (64-bit) Platform
 
 on:
   push:
