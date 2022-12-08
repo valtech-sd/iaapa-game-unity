@@ -1,4 +1,4 @@
-name: Build
+name: Build Standalone Mac (Intel 64)
 
 on:
   push:
