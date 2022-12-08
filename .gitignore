@@ -61,3 +61,8 @@ crashlytics-build.properties
 # Secret Files
 *[Ss]ecret*
 config.json*
+
+# Game-CI folders that cause "dirty builds"
+# https://isaacbroyles.com/gamedev/2020/07/04/unity-github-actions.html
+# https://github.com/game-ci/unity-builder/issues/241
+artifacts/
