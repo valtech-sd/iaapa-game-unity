@@ -12,7 +12,7 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 3. [Unity Hub](https://unity3d.com/get-unity/download) to manage Unity versions and projects and to install the Unity editor.
 4. [a script editor](https://www.dunebook.com/best-unity-ide/) to edit scripts.
 
-## Additional Reqquirements
+## Additional Requirements
 1. [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine)
 
 ## How To Get
