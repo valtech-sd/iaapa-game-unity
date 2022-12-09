@@ -24,11 +24,15 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 4. Make sure to use LFS to pull all files: `git lfs pull`.  Otherwise, you may get errors from missing expected files.
 5. In Unity Hub > Installs, install the Unity Editor for the LTS version used by the repository currently, 2021.3.11f1.
 ### Build (To Only Run)
-1. TBD -- Builds are currently not published / saved to Git.
+1. Click on [the GitHub Releases section of this repository](https://github.com/valtech-sd/iaapa-game-unity/releases) to download builds.
+2.  Unzip the downloaded build and follow the next section below to configure connection to the back-end.
 
-## How To Finish Setting Up (For BOTH Clone OR Build)
+## How To Finish Setting Up
 This unity needs to subscribe to message broker queues in the [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine) for game info. 
-1. In your local copy or build of the project, go to Assets/StreamingAssets.
+1. Find the `StreamingAssets/` folder:
+	a. In your clone, this should be in the project's `Assets/` folder.
+	b. In the Windows build, this should be in the `StandaloneWindows64_Data/` folder.
+	c. In the MacOS build, you need to right click the unzipped file to "Show Package Contents" and then open the `Contents/Resources/Data` folder.
 2. Copy `config.template.json` onto `config.json` in the same directory.
 3. Edit the new `config.json` file to enter secret values we are not committing to version control:
 	- message broker / rabbit mq:
