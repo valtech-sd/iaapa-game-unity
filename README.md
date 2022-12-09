@@ -30,9 +30,9 @@ Unity project repository for the "BEAT THE BUZZ" game for IAAPA 2022 TES After-P
 ## How To Finish Setting Up
 This unity needs to subscribe to message broker queues in the [IAAPA Game Rules Engine](https://github.com/valtech-sd/iaapa-game-rules-engine) for game info. 
 1. Find the `StreamingAssets/` folder:
-	a. In your clone, this should be in the project's `Assets/` folder.
-	b. In the Windows build, this should be in the `StandaloneWindows64_Data/` folder.
-	c. In the MacOS build, you need to right click the unzipped file to "Show Package Contents" and then open the `Contents/Resources/Data` folder.
+	- In a clone, this should be in the project's `Assets/` folder.
+	- In the Windows build, this should be in the `StandaloneWindows64_Data/` folder.
+	- In the MacOS build, you need to right click the unzipped file to "Show Package Contents" and then open the `Contents/Resources/Data` folder.
 2. Copy `config.template.json` onto `config.json` in the same directory.
 3. Edit the new `config.json` file to enter secret values we are not committing to version control:
 	- message broker / rabbit mq:
